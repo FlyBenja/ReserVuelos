@@ -5,6 +5,7 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const db = require('./models');
 const reservaRoutes = require('./routes/reserva');
 const claseVueloRoutes = require('./routes/claseVuelo');
+const pasajeroRoutes = require('./routes/pasajero'); // Importa las rutas de pasajero
 
 const app = express();
 app.use(express.json());
@@ -29,6 +30,7 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 // Rutas
 app.use('/api/reservas', reservaRoutes);
 app.use('/api/clases-vuelo', claseVueloRoutes);
+app.use('/api/pasajeros', pasajeroRoutes); // Añadir la ruta de pasajero
 
 const PORT = process.env.PORT || 3000;
 db.sequelize.sync().then(() => {
