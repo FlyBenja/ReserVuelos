@@ -1,22 +1,30 @@
-// Middleware/authenticateToken.js
+// middleware/authenticateToken.js
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = process.env.JWT_SECRET || 'tu_secreto_jwt';
+const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
-function authenticateToken(req, res, next) {
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+function authenticateToken(roles = []) {
+  return (req, res, next) => {
+    const authHeader = req.headers['authorization'];
+    const token = authHeader && authHeader.split(' ')[1];
 
-  if (!token) {
-    return res.status(401).json({ error: 'Acceso denegado, token faltante' });
-  }
-
-  jwt.verify(token, JWT_SECRET, (err, user) => {
-    if (err) {
-      return res.status(403).json({ error: 'Token inválido' });
+    if (!token) {
+      return res.status(401).json({ error: 'Acceso denegado. Token no proporcionado.' });
     }
-    req.user = user;
-    next();
-  });
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+      if (err) {
+        return res.status(403).json({ error: 'Token inválido.' });
+      }
+
+      // Verificar si el rol del usuario está permitido para acceder a la ruta
+      if (roles.length && !roles.includes(user.roleId)) {
+        return res.status(403).json({ error: 'Acceso denegado. Permisos insuficientes.' });
+      }
+
+      req.user = user;
+      next();
+    });
+  };
 }
 
 module.exports = authenticateToken;

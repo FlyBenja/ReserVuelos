@@ -26,10 +26,10 @@ const userController = require('../controllers/userController');
  *             properties:
  *               username:
  *                 type: string
- *                 example: "juan123"
+ *                 example: "benja"
  *               password:
  *                 type: string
- *                 example: "miContraseñaSegura"
+ *                 example: "admin"
  *               roleId:
  *                 type: integer
  *                 example: 1
@@ -58,10 +58,10 @@ router.post('/', userController.createUser);
  *             properties:
  *               username:
  *                 type: string
- *                 example: "juan123"
+ *                 example: "benja"
  *               password:
  *                 type: string
- *                 example: "miContraseñaSegura"
+ *                 example: "admin"
  *     responses:
  *       200:
  *         description: Inicio de sesión exitoso
