@@ -25,13 +25,14 @@ const reservaController = require('../controllers/reservaController');
  *               codigoReserva:
  *                 type: string
  *                 example: "RSV12345"
- *               fechaReserva:
+ *               fechaInicio:
  *                 type: string
  *                 format: date
  *                 example: "2024-10-28"
- *               claseVueloId:
- *                 type: integer
- *                 example: 1
+ *               fechaFinal:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-11-02"
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente
@@ -148,13 +149,14 @@ router.get('/:id', reservaController.getReservaById);
  *               codigoReserva:
  *                 type: string
  *                 example: "RSV12345"
- *               fechaReserva:
+ *               fechaInicio:
  *                 type: string
  *                 format: date
  *                 example: "2024-10-29"
- *               claseVueloId:
- *                 type: integer
- *                 example: 2
+ *               fechaFinal:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-11-02"
  *     responses:
  *       200:
  *         description: Reserva actualizada exitosamente

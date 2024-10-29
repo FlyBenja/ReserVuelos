@@ -1,10 +1,10 @@
-const { Reserva, Pasajero, ClaseVuelo } = require('../models');
+const { Reserva, Pasajero } = require('../models');
 
 module.exports = {
   // Crear una nueva reserva sin pasajeros
   async createReserva(req, res) {
     try {
-      const { codigoReserva, fechaReserva, claseVueloId } = req.body;
+      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
 
       // Verificar si ya existe una reserva con el mismo código
       const reservaExistente = await Reserva.findOne({ where: { codigoReserva } });
@@ -13,7 +13,7 @@ module.exports = {
       }
 
       // Crear la reserva sin pasajeros
-      const nuevaReserva = await Reserva.create({ codigoReserva, fechaReserva, claseVueloId });
+      const nuevaReserva = await Reserva.create({ codigoReserva, fechaInicio, fechaFinal });
       return res.status(201).json(nuevaReserva);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -52,10 +52,7 @@ module.exports = {
   async getReservas(req, res) {
     try {
       const reservas = await Reserva.findAll({
-        include: [
-          { model: Pasajero, as: 'pasajeros' },
-          { model: ClaseVuelo, as: 'claseVuelo' },
-        ],
+        include: [{ model: Pasajero, as: 'pasajeros' }],
       });
       return res.status(200).json(reservas);
     } catch (error) {
@@ -68,10 +65,7 @@ module.exports = {
     try {
       const { id } = req.params;
       const reserva = await Reserva.findByPk(id, {
-        include: [
-          { model: Pasajero, as: 'pasajeros' },
-          { model: ClaseVuelo, as: 'claseVuelo' },
-        ],
+        include: [{ model: Pasajero, as: 'pasajeros' }],
       });
 
       if (!reserva) {
@@ -88,7 +82,7 @@ module.exports = {
   async updateReserva(req, res) {
     try {
       const { id } = req.params;
-      const { codigoReserva, fechaReserva, claseVueloId } = req.body;
+      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
 
       // Verificar si ya existe una reserva con el mismo código
       const reservaExistente = await Reserva.findOne({ where: { codigoReserva } });
@@ -103,8 +97,8 @@ module.exports = {
       }
 
       reserva.codigoReserva = codigoReserva;
-      reserva.fechaReserva = fechaReserva;
-      reserva.claseVueloId = claseVueloId;
+      reserva.fechaInicio = fechaInicio;
+      reserva.fechaFinal = fechaFinal;
       await reserva.save();
 
       return res.status(200).json(reserva);

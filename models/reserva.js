@@ -5,16 +5,13 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
     },
-    fechaReserva: {
+    fechaInicio: {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    claseVueloId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'ClaseVuelo',
-        key: 'id',
-      },
+    fechaFinal: {
+      type: DataTypes.DATE,
+      allowNull: false,
     },
   });
 
@@ -22,10 +19,6 @@ module.exports = (sequelize, DataTypes) => {
     Reserva.hasMany(models.Pasajero, {
       foreignKey: 'reservaId',
       as: 'pasajeros',
-    });
-    Reserva.belongsTo(models.ClaseVuelo, {
-      foreignKey: 'claseVueloId',
-      as: 'claseVuelo',
     });
   };
 
