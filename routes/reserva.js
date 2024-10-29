@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Reserva, Pasajero, ClaseVuelo } = require('../models');
+const reservaController = require('../controllers/reservaController');
 
 /**
  * @swagger
@@ -50,31 +50,11 @@ const { Reserva, Pasajero, ClaseVuelo } = require('../models');
  *       201:
  *         description: Reserva creada exitosamente
  *       400:
- *         description: Error.- Datos inválidos o faltantes
+ *         description: Error.- Código de reserva ya existe
  *       500:
  *         description: Error al crear la reserva
  */
-router.post('/', async (req, res) => {
-  try {
-    const { codigoReserva, fechaReserva, claseVueloId, pasajeros } = req.body;
-
-    // Crear la nueva reserva con los pasajeros asociados
-    const reserva = await Reserva.create(
-      {
-        codigoReserva,
-        fechaReserva,
-        claseVueloId,
-        pasajeros,
-      },
-      {
-        include: [{ model: Pasajero, as: 'pasajeros' }],
-      }
-    );
-    res.status(201).json(reserva);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.post('/', reservaController.createReserva);
 
 /**
  * @swagger
@@ -85,55 +65,89 @@ router.post('/', async (req, res) => {
  *     responses:
  *       200:
  *         description: Lista de reservas
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                   codigoReserva:
- *                     type: string
- *                   fechaReserva:
- *                     type: string
- *                     format: date
- *                   claseVuelo:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                       nombreClase:
- *                         type: string
- *                   pasajeros:
- *                     type: array
- *                     items:
- *                       type: object
- *                       properties:
- *                         id:
- *                           type: integer
- *                         nombre:
- *                           type: string
- *                         pasaporte:
- *                           type: string
- *                         asiento:
- *                           type: string
- *       500:
- *         description: Error al obtener las reservas
  */
-router.get('/', async (req, res) => {
-  try {
-    const reservas = await Reserva.findAll({
-      include: [
-        { model: Pasajero, as: 'pasajeros' },
-        { model: ClaseVuelo, as: 'claseVuelo' },
-      ],
-    });
-    res.status(200).json(reservas);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.get('/', reservaController.getReservas);
+
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *   get:
+ *     summary: Obtiene una reserva por ID
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     responses:
+ *       200:
+ *         description: Reserva encontrada
+ *       404:
+ *         description: Reserva no encontrada
+ */
+router.get('/:id', reservaController.getReservaById);
+
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *   put:
+ *     summary: Actualiza una reserva por ID
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               codigoReserva:
+ *                 type: string
+ *                 example: "RSV12345"
+ *               fechaReserva:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-10-29"
+ *               claseVueloId:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Reserva actualizada exitosamente
+ *       404:
+ *         description: Reserva no encontrada
+ *       400:
+ *         description: Error.- Código de reserva ya existe
+ */
+router.put('/:id', reservaController.updateReserva);
+
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *   delete:
+ *     summary: Elimina una reserva por ID
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     responses:
+ *       200:
+ *         description: Reserva eliminada correctamente
+ *       404:
+ *         description: Reserva no encontrada
+ */
+router.delete('/:id', reservaController.deleteReserva);
 
 module.exports = router;
