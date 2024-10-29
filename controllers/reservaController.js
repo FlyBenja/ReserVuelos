@@ -1,10 +1,10 @@
 const { Reserva, Pasajero, ClaseVuelo } = require('../models');
 
 module.exports = {
-  // Crear una nueva reserva con pasajeros
+  // Crear una nueva reserva sin pasajeros
   async createReserva(req, res) {
     try {
-      const { codigoReserva, fechaReserva, claseVueloId, pasajeros } = req.body;
+      const { codigoReserva, fechaReserva, claseVueloId } = req.body;
 
       // Verificar si ya existe una reserva con el mismo código
       const reservaExistente = await Reserva.findOne({ where: { codigoReserva } });
@@ -12,20 +12,37 @@ module.exports = {
         return res.status(400).json({ error: 'Error.- Código de reserva ya existe' });
       }
 
-      // Crear la reserva con los pasajeros asociados
-      const nuevaReserva = await Reserva.create(
-        {
-          codigoReserva,
-          fechaReserva,
-          claseVueloId,
-          pasajeros,
-        },
-        {
-          include: [{ model: Pasajero, as: 'pasajeros' }],
-        }
+      // Crear la reserva sin pasajeros
+      const nuevaReserva = await Reserva.create({ codigoReserva, fechaReserva, claseVueloId });
+      return res.status(201).json(nuevaReserva);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Agregar pasajeros a una reserva existente
+  async addPasajeros(req, res) {
+    try {
+      const { id } = req.params; // ID de la reserva
+      const { pasajeros } = req.body; // Array de pasajeros a agregar
+
+      const reserva = await Reserva.findByPk(id);
+      if (!reserva) {
+        return res.status(404).json({ error: 'Reserva no encontrada' });
+      }
+
+      // Crear cada pasajero y asociarlo con la reserva
+      const nuevosPasajeros = await Promise.all(
+        pasajeros.map(async (pasajeroData) => {
+          const pasajeroExistente = await Pasajero.findOne({ where: { pasaporte: pasajeroData.pasaporte } });
+          if (pasajeroExistente) {
+            throw new Error(`El pasaporte ${pasajeroData.pasaporte} ya está registrado`);
+          }
+          return Pasajero.create({ ...pasajeroData, reservaId: id });
+        })
       );
 
-      return res.status(201).json(nuevaReserva);
+      return res.status(201).json({ message: 'Pasajeros agregados a la reserva', pasajeros: nuevosPasajeros });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

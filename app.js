@@ -10,7 +10,7 @@ const pasajeroRoutes = require('./routes/pasajero'); // Importa las rutas de pas
 const app = express();
 app.use(express.json());
 
-// Configuración de Swagger
+// Configuración de Swagger con autenticación Bearer
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: '3.0.0',
@@ -20,8 +20,18 @@ const swaggerOptions = {
       description: 'API para gestionar reservas de vuelo',
     },
     servers: [{ url: `http://localhost:${process.env.PORT || 3000}` }],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT',
+        },
+      },
+    },
+    security: [{ bearerAuth: [] }],
   },
-  apis: ['./routes/*.js'], // Asegúrate de que Swagger documente todas las rutas en la carpeta routes
+  apis: ['./routes/*.js'],
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

@@ -13,7 +13,7 @@ const reservaController = require('../controllers/reservaController');
  * @swagger
  * /api/reservas:
  *   post:
- *     summary: Crea una nueva reserva con sus pasajeros
+ *     summary: Crea una nueva reserva sin pasajeros
  *     tags: [Reservaciones]
  *     requestBody:
  *       required: true
@@ -32,6 +32,36 @@ const reservaController = require('../controllers/reservaController');
  *               claseVueloId:
  *                 type: integer
  *                 example: 1
+ *     responses:
+ *       201:
+ *         description: Reserva creada exitosamente
+ *       400:
+ *         description: Error.- Código de reserva ya existe
+ *       500:
+ *         description: Error al crear la reserva
+ */
+router.post('/', reservaController.createReserva);
+
+/**
+ * @swagger
+ * /api/reservas/{id}/pasajeros:
+ *   post:
+ *     summary: Agrega pasajeros a una reserva existente
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
  *               pasajeros:
  *                 type: array
  *                 items:
@@ -46,15 +76,21 @@ const reservaController = require('../controllers/reservaController');
  *                     asiento:
  *                       type: string
  *                       example: "12A"
+ *                     role:
+ *                       type: string
+ *                       example: "Cliente"
+ *                     token:
+ *                       type: string
+ *                       example: "token_de_autenticacion"
  *     responses:
  *       201:
- *         description: Reserva creada exitosamente
- *       400:
- *         description: Error.- Código de reserva ya existe
+ *         description: Pasajeros agregados a la reserva
+ *       404:
+ *         description: Reserva no encontrada
  *       500:
- *         description: Error al crear la reserva
+ *         description: Error al agregar pasajeros
  */
-router.post('/', reservaController.createReserva);
+router.post('/:id/pasajeros', reservaController.addPasajeros);
 
 /**
  * @swagger

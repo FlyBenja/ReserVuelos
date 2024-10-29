@@ -13,6 +13,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
+    usuario: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    contraseña: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.STRING,
+      defaultValue: 'Cliente',
+    },
     reservaId: {
       type: DataTypes.INTEGER,
       references: {
