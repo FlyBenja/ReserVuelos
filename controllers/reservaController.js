@@ -4,7 +4,7 @@ module.exports = {
   // Crear una nueva reserva sin pasajeros
   async createReserva(req, res) {
     try {
-      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
+      const { codigoReserva, fechaInicio, fechaFinal, status } = req.body;
 
       // Verificar si ya existe una reserva con el mismo código
       const reservaExistente = await Reserva.findOne({ where: { codigoReserva } });
@@ -13,36 +13,38 @@ module.exports = {
       }
 
       // Crear la reserva sin pasajeros
-      const nuevaReserva = await Reserva.create({ codigoReserva, fechaInicio, fechaFinal });
+      const nuevaReserva = await Reserva.create({ codigoReserva, fechaInicio, fechaFinal, status });
       return res.status(201).json(nuevaReserva);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   },
 
-  // Agregar pasajeros a una reserva existente
-  async addPasajeros(req, res) {
+  // Agregar un pasajero existente a una reserva con detalles adicionales
+  async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeros } = req.body; // Array de pasajeros a agregar
+      const { pasajeroId, asiento, numeroVuelo, claseVuelo } = req.body; // ID del pasajero y detalles adicionales
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
         return res.status(404).json({ error: 'Reserva no encontrada' });
       }
 
-      // Crear cada pasajero y asociarlo con la reserva
-      const nuevosPasajeros = await Promise.all(
-        pasajeros.map(async (pasajeroData) => {
-          const pasajeroExistente = await Pasajero.findOne({ where: { pasaporte: pasajeroData.pasaporte } });
-          if (pasajeroExistente) {
-            throw new Error(`El pasaporte ${pasajeroData.pasaporte} ya está registrado`);
-          }
-          return Pasajero.create({ ...pasajeroData, reservaId: id });
-        })
-      );
+      const pasajero = await Pasajero.findByPk(pasajeroId);
+      if (!pasajero) {
+        return res.status(404).json({ error: 'Pasajero no encontrado' });
+      }
 
-      return res.status(201).json({ message: 'Pasajeros agregados a la reserva', pasajeros: nuevosPasajeros });
+      // Actualiza el pasajero con los detalles adicionales y lo asocia a la reserva
+      await pasajero.update({
+        asiento,
+        numeroVuelo,
+        claseVuelo,
+        reservaId: id,
+      });
+
+      return res.status(201).json({ message: 'Pasajero agregado a la reserva con detalles', pasajero });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -60,45 +62,43 @@ module.exports = {
     }
   },
 
-  // Obtener una reserva por ID
-  async getReservaById(req, res) {
+  // Obtener todas las reservas en las que participa un pasajero por ID de pasajero
+  async getReservasByPasajeroId(req, res) {
     try {
-      const { id } = req.params;
-      const reserva = await Reserva.findByPk(id, {
-        include: [{ model: Pasajero, as: 'pasajeros' }],
+      const { pasajeroId } = req.params;
+
+      const reservas = await Reserva.findAll({
+        include: [
+          {
+            model: Pasajero,
+            as: 'pasajeros',
+            where: { id: pasajeroId },
+          },
+        ],
       });
 
-      if (!reserva) {
-        return res.status(404).json({ error: 'Reserva no encontrada' });
+      if (!reservas.length) {
+        return res.status(404).json({ error: 'No se encontraron reservas para el pasajero' });
       }
 
-      return res.status(200).json(reserva);
+      return res.status(200).json(reservas);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   },
 
-  // Actualizar una reserva por ID
-  async updateReserva(req, res) {
+  // Actualizar solo el estatus de una reserva por ID
+  async updateReservaStatus(req, res) {
     try {
       const { id } = req.params;
-      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
+      const { status } = req.body;
 
-      // Verificar si ya existe una reserva con el mismo código
-      const reservaExistente = await Reserva.findOne({ where: { codigoReserva } });
-      if (reservaExistente && reservaExistente.id !== parseInt(id, 10)) {
-        return res.status(400).json({ error: 'Error.- Código de reserva ya existe' });
-      }
-
-      // Buscar y actualizar la reserva
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
         return res.status(404).json({ error: 'Reserva no encontrada' });
       }
 
-      reserva.codigoReserva = codigoReserva;
-      reserva.fechaInicio = fechaInicio;
-      reserva.fechaFinal = fechaFinal;
+      reserva.status = status;
       await reserva.save();
 
       return res.status(200).json(reserva);

@@ -33,6 +33,9 @@ const reservaController = require('../controllers/reservaController');
  *                 type: string
  *                 format: date
  *                 example: "2024-11-02"
+ *               status:
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente
@@ -45,9 +48,9 @@ router.post('/', reservaController.createReserva);
 
 /**
  * @swagger
- * /api/reservas/{id}/pasajeros:
+ * /api/reservas/{id}/pasajero:
  *   post:
- *     summary: Agrega pasajeros a una reserva existente
+ *     summary: Agrega un pasajero existente a una reserva con detalles adicionales
  *     tags: [Reservaciones]
  *     parameters:
  *       - in: path
@@ -63,35 +66,27 @@ router.post('/', reservaController.createReserva);
  *           schema:
  *             type: object
  *             properties:
- *               pasajeros:
- *                 type: array
- *                 items:
- *                   type: object
- *                   properties:
- *                     nombre:
- *                       type: string
- *                       example: "Juan Pérez"
- *                     pasaporte:
- *                       type: string
- *                       example: "A1234567"
- *                     asiento:
- *                       type: string
- *                       example: "12A"
- *                     role:
- *                       type: string
- *                       example: "Cliente"
- *                     token:
- *                       type: string
- *                       example: "token_de_autenticacion"
+ *               pasajeroId:
+ *                 type: integer
+ *                 example: 1
+ *               asiento:
+ *                 type: string
+ *                 example: "12A"
+ *               numeroVuelo:
+ *                 type: string
+ *                 example: "AB123"
+ *               claseVuelo:
+ *                 type: string
+ *                 example: "Primera Clase"
  *     responses:
  *       201:
- *         description: Pasajeros agregados a la reserva
+ *         description: Pasajero agregado a la reserva con detalles
  *       404:
- *         description: Reserva no encontrada
+ *         description: Reserva o pasajero no encontrado
  *       500:
- *         description: Error al agregar pasajeros
+ *         description: Error al agregar pasajero
  */
-router.post('/:id/pasajeros', reservaController.addPasajeros);
+router.post('/:id/pasajero', reservaController.addPasajeroToReserva);
 
 /**
  * @swagger
@@ -107,30 +102,30 @@ router.get('/', reservaController.getReservas);
 
 /**
  * @swagger
- * /api/reservas/{id}:
+ * /api/reservas/pasajero/{pasajeroId}:
  *   get:
- *     summary: Obtiene una reserva por ID
+ *     summary: Obtiene todas las reservas en las que participa un pasajero por ID de pasajero
  *     tags: [Reservaciones]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: pasajeroId
  *         schema:
  *           type: integer
  *         required: true
- *         description: ID de la reserva
+ *         description: ID del pasajero
  *     responses:
  *       200:
- *         description: Reserva encontrada
+ *         description: Lista de reservas del pasajero
  *       404:
- *         description: Reserva no encontrada
+ *         description: No se encontraron reservas para el pasajero
  */
-router.get('/:id', reservaController.getReservaById);
+router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
 
 /**
  * @swagger
- * /api/reservas/{id}:
+ * /api/reservas/{id}/status:
  *   put:
- *     summary: Actualiza una reserva por ID
+ *     summary: Actualiza el estatus de una reserva
  *     tags: [Reservaciones]
  *     parameters:
  *       - in: path
@@ -146,46 +141,17 @@ router.get('/:id', reservaController.getReservaById);
  *           schema:
  *             type: object
  *             properties:
- *               codigoReserva:
- *                 type: string
- *                 example: "RSV12345"
- *               fechaInicio:
- *                 type: string
- *                 format: date
- *                 example: "2024-10-29"
- *               fechaFinal:
- *                 type: string
- *                 format: date
- *                 example: "2024-11-02"
+ *               status:
+ *                 type: boolean
+ *                 example: false
  *     responses:
  *       200:
- *         description: Reserva actualizada exitosamente
+ *         description: Estatus de la reserva actualizado exitosamente
  *       404:
  *         description: Reserva no encontrada
- *       400:
- *         description: Error.- Código de reserva ya existe
+ *       500:
+ *         description: Error al actualizar el estatus de la reserva
  */
-router.put('/:id', reservaController.updateReserva);
-
-/**
- * @swagger
- * /api/reservas/{id}:
- *   delete:
- *     summary: Elimina una reserva por ID
- *     tags: [Reservaciones]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID de la reserva
- *     responses:
- *       200:
- *         description: Reserva eliminada correctamente
- *       404:
- *         description: Reserva no encontrada
- */
-router.delete('/:id', reservaController.deleteReserva);
+router.put('/:id/status', reservaController.updateReservaStatus);
 
 module.exports = router;
