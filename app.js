@@ -20,7 +20,7 @@ const swaggerOptions = {
     },
     servers: [{ url: `http://localhost:${process.env.PORT || 3000}` }],
   },
-  apis: ['./routes/*.js'],
+  apis: ['./routes/*.js'], // Asegúrate de que Swagger documente todas las rutas en la carpeta routes
 };
 
 const swaggerDocs = swaggerJsDoc(swaggerOptions);

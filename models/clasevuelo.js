@@ -3,6 +3,7 @@ module.exports = (sequelize, DataTypes) => {
     nombreClase: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true, // Asegura la unicidad en el nivel de modelo también
     },
   });
 
