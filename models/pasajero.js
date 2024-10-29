@@ -13,32 +13,19 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    usuario: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    contraseña: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.STRING,
-      defaultValue: 'Cliente',
-    },
-    reservaId: {
+    id_user: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Reserva',
+        model: 'User',
         key: 'id',
       },
     },
   });
 
   Pasajero.associate = (models) => {
-    Pasajero.belongsTo(models.Reserva, {
-      foreignKey: 'reservaId',
-      as: 'reserva',
+    Pasajero.belongsTo(models.User, {
+      foreignKey: 'id_user',
+      as: 'user',
     });
   };
 

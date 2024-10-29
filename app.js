@@ -5,12 +5,14 @@ const swaggerJsDoc = require('swagger-jsdoc');
 const db = require('./models');
 const reservaRoutes = require('./routes/reserva');
 const claseVueloRoutes = require('./routes/claseVuelo');
-const pasajeroRoutes = require('./routes/pasajero'); // Importa las rutas de pasajero
+const pasajeroRoutes = require('./routes/pasajero');
+const userRoutes = require('./routes/user');
+const roleRoutes = require('./routes/role'); // Nueva ruta para roles
 
 const app = express();
 app.use(express.json());
 
-// Configuración de Swagger con autenticación Bearer
+// Configuración de Swagger
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: '3.0.0',
@@ -38,9 +40,11 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Rutas
-app.use('/api/reservas', reservaRoutes);
-app.use('/api/clases-vuelo', claseVueloRoutes);
-app.use('/api/pasajeros', pasajeroRoutes); // Añadir la ruta de pasajero
+app.use('/api/roles', roleRoutes);       // Roles
+app.use('/api/users', userRoutes);       // Users
+app.use('/api/clases-vuelo', claseVueloRoutes); // Clases de Vuelo
+app.use('/api/reservas', reservaRoutes);        // Reservaciones
+app.use('/api/pasajeros', pasajeroRoutes);      // Pasajeros
 
 const PORT = process.env.PORT || 3000;
 db.sequelize.sync().then(() => {

@@ -1,63 +1,53 @@
-const { Pasajero } = require('../models');
+const { Pasajero, User } = require('../models'); // Asegúrate de que User esté en el modelo
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const JWT_SECRET = process.env.JWT_SECRET || 'tu_secreto_jwt';
 
 module.exports = {
-  // Crear un nuevo pasajero con usuario y contraseña
+  // Crear un nuevo pasajero con relación a User
   async createPasajero(req, res) {
     try {
-      const { nombre, pasaporte, asiento, usuario, contraseña, role, reservaId } = req.body;
+      const { nombre, pasaporte, asiento, id_user } = req.body;
 
-      // Verificar si ya existe un pasajero con el mismo usuario o pasaporte
-      const pasajeroExistente = await Pasajero.findOne({ where: { usuario } });
-      if (pasajeroExistente) {
-        return res.status(400).json({ error: 'Error.- Usuario ya registrado' });
-      }
-
+      // Verificar si ya existe un pasajero con el mismo pasaporte
       const pasaporteExistente = await Pasajero.findOne({ where: { pasaporte } });
       if (pasaporteExistente) {
         return res.status(400).json({ error: 'Error.- Pasaporte ya registrado' });
       }
 
-      // Hashear la contraseña
-      const hashedPassword = await bcrypt.hash(contraseña, 10);
-
-      // Crear el pasajero
+      // Crear el pasajero relacionado con un usuario existente
       const nuevoPasajero = await Pasajero.create({
         nombre,
         pasaporte,
         asiento,
-        usuario,
-        contraseña: hashedPassword,
-        role,
-        reservaId,
+        id_user,
       });
+
       return res.status(201).json(nuevoPasajero);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   },
 
-  // Login del pasajero usando usuario y contraseña
-  async loginPasajero(req, res) {
+  // Login del usuario usando usuario y contraseña en User
+  async loginUser(req, res) {
     try {
       const { usuario, contraseña } = req.body;
 
-      // Verificar si el usuario existe
-      const pasajero = await Pasajero.findOne({ where: { usuario } });
-      if (!pasajero) {
+      // Verificar si el usuario existe en User
+      const user = await User.findOne({ where: { user: usuario } });
+      if (!user) {
         return res.status(401).json({ error: 'Credenciales incorrectas' });
       }
 
       // Verificar la contraseña
-      const validPassword = await bcrypt.compare(contraseña, pasajero.contraseña);
+      const validPassword = await bcrypt.compare(contraseña, user.contraseña);
       if (!validPassword) {
         return res.status(401).json({ error: 'Credenciales incorrectas' });
       }
 
       // Crear el token JWT
-      const token = jwt.sign({ id: pasajero.id, role: pasajero.role }, JWT_SECRET, { expiresIn: '1h' });
+      const token = jwt.sign({ id: user.id, role: user.role }, JWT_SECRET, { expiresIn: '1h' });
 
       return res.status(200).json({ token });
     } catch (error) {
@@ -95,24 +85,18 @@ module.exports = {
   async updatePasajero(req, res) {
     try {
       const { id } = req.params;
-      const { nombre, pasaporte, asiento, usuario, contraseña, role, reservaId } = req.body;
+      const { nombre, pasaporte, asiento, id_user } = req.body;
 
       const pasajero = await Pasajero.findByPk(id);
       if (!pasajero) {
         return res.status(404).json({ error: 'Pasajero no encontrado' });
       }
 
-      // Actualizar los campos, incluyendo el hash de la contraseña si se proporciona
+      // Actualizar los campos
       pasajero.nombre = nombre;
       pasajero.pasaporte = pasaporte;
       pasajero.asiento = asiento;
-      pasajero.usuario = usuario;
-      pasajero.role = role;
-      pasajero.reservaId = reservaId || null;
-
-      if (contraseña) {
-        pasajero.contraseña = await bcrypt.hash(contraseña, 10);
-      }
+      pasajero.id_user = id_user;
 
       await pasajero.save();
 
