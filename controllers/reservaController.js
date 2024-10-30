@@ -96,8 +96,8 @@ module.exports = {
   // Actualizar el estatus de un pasajero
   async updatePasajeroStatus(req, res) {
     try {
-      const { id } = req.params;
-      const { status } = req.body;
+      const { id } = req.params; // ID del pasajero
+      const { status } = req.body; // Nuevo estatus
 
       const pasajero = await Pasajero.findByPk(id);
       if (!pasajero) {
@@ -108,6 +108,31 @@ module.exports = {
       await pasajero.save();
 
       return res.status(200).json({ message: 'Estatus del pasajero actualizado', pasajero });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Obtener todas las reservas de un pasajero específico
+  async getReservasByPasajeroId(req, res) {
+    try {
+      const { pasajeroId } = req.params;
+
+      const reservas = await Reserva.findAll({
+        include: [
+          {
+            model: Pasajero,
+            as: 'pasajeros',
+            where: { id: pasajeroId },
+          },
+        ],
+      });
+
+      if (!reservas.length) {
+        return res.status(404).json({ error: 'No se encontraron reservas para el pasajero' });
+      }
+
+      return res.status(200).json(reservas);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
