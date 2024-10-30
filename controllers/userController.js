@@ -80,4 +80,66 @@ module.exports = {
       return res.status(500).json({ error: error.message });
     }
   },
+
+  // Actualizar contraseña del usuario
+  async updatePassword(req, res) {
+    try {
+      const { id } = req.params;
+      const { currentPassword, newPassword, confirmPassword } = req.body;
+
+      // Verificar que la nueva contraseña y la confirmación coinciden
+      if (newPassword !== confirmPassword) {
+        return res.status(400).json({ error: 'Las contraseñas no coinciden' });
+      }
+
+      // Buscar el usuario y verificar la contraseña actual
+      const user = await User.findByPk(id);
+      if (!user) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+
+      const isCurrentPasswordValid = await bcrypt.compare(currentPassword, user.password);
+      if (!isCurrentPasswordValid) {
+        return res.status(401).json({ error: 'La contraseña actual es incorrecta' });
+      }
+
+      // Hashear la nueva contraseña
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      // Actualizar la contraseña
+      user.password = hashedPassword;
+      await user.save();
+
+      return res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Actualizar nombre de usuario
+  async updateUsername(req, res) {
+    try {
+      const { id } = req.params;
+      const { newUsername } = req.body;
+
+      // Verificar si el nuevo nombre de usuario ya está en uso
+      const usernameExistente = await User.findOne({ where: { username: newUsername } });
+      if (usernameExistente) {
+        return res.status(400).json({ error: 'Error.- Nombre de usuario ya registrado' });
+      }
+
+      // Buscar el usuario y actualizar el nombre de usuario
+      const user = await User.findByPk(id);
+      if (!user) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+
+      user.username = newUsername;
+      await user.save();
+
+      return res.status(200).json({ message: 'Nombre de usuario actualizado correctamente' });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
 };
