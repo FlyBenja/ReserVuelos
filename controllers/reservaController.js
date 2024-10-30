@@ -1,4 +1,4 @@
-const { Reserva } = require('../models');
+const { Reserva, Pasajero } = require('../models');
 
 module.exports = {
   // Crear una nueva reserva sin pasajeros
@@ -20,15 +20,13 @@ module.exports = {
   async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo, status } = req.body;
+      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo } = req.body;
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
         return res.status(404).json({ error: 'Reserva no encontrada' });
       }
 
-      // Aquí debes tener lógica para agregar el pasajero
-      // Supongamos que tienes un modelo de Pasajero
       const pasajero = await Pasajero.findByPk(pasajeroId);
       if (!pasajero) {
         return res.status(404).json({ error: 'Pasajero no encontrado' });
@@ -41,7 +39,6 @@ module.exports = {
         numeroVuelo,
         claseVuelo,
         reservaId: id,
-        status,
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva con detalles', pasajero });
