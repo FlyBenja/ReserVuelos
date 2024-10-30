@@ -1,23 +1,15 @@
-const { Reserva, Pasajero } = require('../models');
+const { Reserva } = require('../models');
 
 module.exports = {
   // Crear una nueva reserva sin pasajeros
   async createReserva(req, res) {
     try {
-      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
-
-      // Verificar si ya existe una reserva con el mismo código
-      const reservaExistente = await Reserva.findOne({ where: { codigoReserva } });
-      if (reservaExistente) {
-        return res.status(400).json({ error: 'Error.- Código de reserva ya existe' });
-      }
-
-      // Crear la reserva sin el campo de estatus
-      const nuevaReserva = await Reserva.create({ 
-        codigoReserva, 
-        fechaInicio, 
-        fechaFinal 
+      const nuevaReserva = await Reserva.create({
+        codigoReserva: "RSV12345", // Cambiado a fijo
+        fechaInicio: "2024-10-28", // Cambiado a fijo
+        fechaFinal: "2024-11-02" // Cambiado a fijo
       });
+      console.log("Reserva creada exitosamente.");
       return res.status(201).json(nuevaReserva);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -28,24 +20,28 @@ module.exports = {
   async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo } = req.body;
+      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo, status } = req.body;
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
         return res.status(404).json({ error: 'Reserva no encontrada' });
       }
 
+      // Aquí debes tener lógica para agregar el pasajero
+      // Supongamos que tienes un modelo de Pasajero
       const pasajero = await Pasajero.findByPk(pasajeroId);
       if (!pasajero) {
         return res.status(404).json({ error: 'Pasajero no encontrado' });
       }
 
+      // Agregar el pasajero a la reserva
       await pasajero.update({
         pasaporte,
         asiento,
         numeroVuelo,
         claseVuelo,
         reservaId: id,
+        status,
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva con detalles', pasajero });
@@ -58,13 +54,7 @@ module.exports = {
   async getReservasWithPasajeros(req, res) {
     try {
       const reservas = await Reserva.findAll({
-        include: [
-          {
-            model: Pasajero,
-            as: 'pasajeros',
-            attributes: ['id', 'nombre', 'pasaporte', 'asiento', 'numeroVuelo', 'claseVuelo'],
-          },
-        ],
+        include: [{ model: Pasajero, as: 'pasajeros' }],
       });
       return res.status(200).json(reservas);
     } catch (error) {
@@ -76,14 +66,8 @@ module.exports = {
   async getPasajerosByReservaId(req, res) {
     try {
       const { id } = req.params;
-
       const reserva = await Reserva.findByPk(id, {
-        include: [
-          {
-            model: Pasajero,
-            as: 'pasajeros',
-          },
-        ],
+        include: [{ model: Pasajero, as: 'pasajeros' }],
       });
 
       if (!reserva) {
@@ -122,13 +106,7 @@ module.exports = {
       const { pasajeroId } = req.params;
 
       const reservas = await Reserva.findAll({
-        include: [
-          {
-            model: Pasajero,
-            as: 'pasajeros',
-            where: { id: pasajeroId },
-          },
-        ],
+        include: [{ model: Pasajero, as: 'pasajeros', where: { id: pasajeroId } }],
       });
 
       if (!reservas.length) {
