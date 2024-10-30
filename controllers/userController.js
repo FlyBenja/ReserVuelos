@@ -1,12 +1,12 @@
 // controllers/userController.js
-
-const { User, Role } = require('../models');
+const { User } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const pasajeroController = require('./pasajeroController'); // Importa el controlador de Pasajero
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 module.exports = {
-  // Crear un nuevo usuario
+  // Crear un nuevo usuario y un pasajero relacionado
   async createUser(req, res) {
     try {
       const { username, password, roleId } = req.body;
@@ -15,12 +15,6 @@ module.exports = {
       const userExistente = await User.findOne({ where: { username } });
       if (userExistente) {
         return res.status(400).json({ error: 'Error.- Usuario ya registrado' });
-      }
-
-      // Verificar que el rol existe
-      const role = await Role.findByPk(roleId);
-      if (!role) {
-        return res.status(400).json({ error: 'Error.- Rol no encontrado' });
       }
 
       // Hashear la contraseña
@@ -32,6 +26,9 @@ module.exports = {
         password: hashedPassword,
         roleId,
       });
+
+      // Crear automáticamente un pasajero relacionado con el nuevo usuario
+      await pasajeroController.createPasajeroForUser(newUser.id);
 
       return res.status(201).json(newUser);
     } catch (error) {
