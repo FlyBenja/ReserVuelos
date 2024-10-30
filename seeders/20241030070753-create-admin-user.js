@@ -3,6 +3,9 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
+    // Asegurarse de que la tabla Roles existe
+    await queryInterface.sequelize.query("CREATE TABLE IF NOT EXISTS Roles (id SERIAL PRIMARY KEY, nombreRole VARCHAR(255), createdAt TIMESTAMP, updatedAt TIMESTAMP)");
+
     // Verificar si el rol Admin existe
     const [results] = await queryInterface.sequelize.query(
       "SELECT * FROM Roles WHERE nombreRole = 'Admin'"
@@ -19,6 +22,8 @@ module.exports = {
         createdAt: new Date(),
         updatedAt: new Date()
       }], {});
+    } else {
+      console.error("El rol 'Admin' no existe. Asegúrate de que la migración de roles se haya ejecutado correctamente.");
     }
   },
 
