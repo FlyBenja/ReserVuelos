@@ -23,7 +23,6 @@ module.exports = {
       });
 
       await pasajeroController.createPasajeroForUser(newUser.id);
-
       return res.status(201).json(newUser);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -52,7 +51,7 @@ module.exports = {
     }
   },
 
-  // Obtener datos del usuario autenticado mediante el token
+  // Obtener el usuario autenticado mediante el token
   async getUserByToken(req, res) {
     try {
       const userId = req.user.id;
