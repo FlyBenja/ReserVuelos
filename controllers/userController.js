@@ -1,4 +1,4 @@
-const { User, Role } = require('../models');
+const { User, Role, Pasajero, Reserva } = require('../models'); // Asegúrate de incluir Pasajero y Reserva
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pasajeroController = require('./pasajeroController');
@@ -24,6 +24,39 @@ module.exports = {
 
       await pasajeroController.createPasajeroForUser(newUser.id);
       return res.status(201).json(newUser);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Obtener todos los usuarios
+  async getAllUsers(req, res) {
+    try {
+      const users = await User.findAll({
+        include: [{ model: Role, as: 'role' }],
+      });
+      return res.status(200).json(users);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Eliminar un usuario específico
+  async deleteUser(req, res) {
+    try {
+      const { id } = req.params;
+
+      // Eliminar los pasajeros y reservas asociados al usuario
+      await Pasajero.destroy({ where: { userId: id } }); // Asegúrate de que 'userId' sea el nombre correcto en la tabla Pasajero
+      await Reserva.destroy({ where: { pasajeroId: id } }); // Asegúrate de que 'pasajeroId' sea el nombre correcto en la tabla Reserva
+
+      const user = await User.findByPk(id);
+      if (!user) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+
+      await user.destroy();
+      return res.status(200).json({ message: 'Usuario eliminado correctamente' });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

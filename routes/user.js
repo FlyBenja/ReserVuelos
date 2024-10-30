@@ -10,6 +10,7 @@ const authenticateToken = require('../Middleware/authenticateToken');
  *   description: API para gestionar los usuarios y autenticación
  */
 
+// Crear un nuevo usuario
 /**
  * @swagger
  * /api/users:
@@ -36,12 +37,52 @@ const authenticateToken = require('../Middleware/authenticateToken');
  *       201:
  *         description: Usuario creado exitosamente
  *       400:
- *         description: Error.- Usuario o rol no encontrado
+ *         description: Error.- Usuario ya registrado
  *       500:
  *         description: Error al crear el usuario
  */
 router.post('/', userController.createUser);
 
+// Obtener todos los usuarios
+/**
+ * @swagger
+ * /api/users:
+ *   get:
+ *     summary: Obtiene todos los usuarios
+ *     tags: [Users]
+ *     responses:
+ *       200:
+ *         description: Lista de usuarios
+ *       500:
+ *         description: Error al obtener los usuarios
+ */
+router.get('/', userController.getAllUsers);
+
+// Eliminar un usuario
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   delete:
+ *     summary: Elimina un usuario específico
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario eliminado correctamente
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error al eliminar el usuario
+ */
+router.delete('/:id', userController.deleteUser);
+
+// Login de usuario
 /**
  * @swagger
  * /api/users/login:
@@ -71,11 +112,12 @@ router.post('/', userController.createUser);
  */
 router.post('/login', userController.loginUser);
 
+// Obtener el usuario autenticado usando el token
 /**
  * @swagger
  * /api/users/me:
  *   get:
- *     summary: Obtiene el usuario autenticado usando el token
+ *     summary: Obtiene el usuario autenticado
  *     tags: [Users]
  *     responses:
  *       200:
@@ -85,6 +127,7 @@ router.post('/login', userController.loginUser);
  */
 router.get('/me', authenticateToken(), userController.getUserByToken);
 
+// Actualizar la contraseña del usuario autenticado
 /**
  * @swagger
  * /api/users/me/password:
@@ -121,6 +164,7 @@ router.get('/me', authenticateToken(), userController.getUserByToken);
  */
 router.put('/me/password', authenticateToken(), userController.updatePassword);
 
+// Actualizar el nombre de usuario del usuario autenticado
 /**
  * @swagger
  * /api/users/me/username:
