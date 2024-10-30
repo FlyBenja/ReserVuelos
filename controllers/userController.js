@@ -1,3 +1,4 @@
+// controllers/userController.js
 const { User, Role, Pasajero, Reserva } = require('../models'); // Asegúrate de incluir Pasajero y Reserva
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -22,6 +23,7 @@ module.exports = {
         roleId,
       });
 
+      // Crear el pasajero asociado al nuevo usuario
       await pasajeroController.createPasajeroForUser(newUser.id);
       return res.status(201).json(newUser);
     } catch (error) {
