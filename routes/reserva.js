@@ -9,6 +9,7 @@ const reservaController = require('../controllers/reservaController');
  *   description: API para gestionar las reservaciones
  */
 
+// Crear una reserva
 /**
  * @swagger
  * /api/reservas:
@@ -46,6 +47,7 @@ const reservaController = require('../controllers/reservaController');
  */
 router.post('/', reservaController.createReserva);
 
+// Agregar pasajero a la reserva
 /**
  * @swagger
  * /api/reservas/{id}/pasajero:
@@ -91,6 +93,7 @@ router.post('/', reservaController.createReserva);
  */
 router.post('/:id/pasajero', reservaController.addPasajeroToReserva);
 
+// Obtener todas las reservas junto con los pasajeros
 /**
  * @swagger
  * /api/reservas:
@@ -101,34 +104,14 @@ router.post('/:id/pasajero', reservaController.addPasajeroToReserva);
  *       200:
  *         description: Lista de reservas
  */
-router.get('/', reservaController.getReservas);
+router.get('/', reservaController.getReservasWithPasajeros);
 
+// Obtener pasajeros de una reserva específica
 /**
  * @swagger
- * /api/reservas/pasajero/{pasajeroId}:
+ * /api/reservas/{id}/pasajeros:
  *   get:
- *     summary: Obtiene todas las reservas en las que participa un pasajero por ID de pasajero
- *     tags: [Reservaciones]
- *     parameters:
- *       - in: path
- *         name: pasajeroId
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID del pasajero
- *     responses:
- *       200:
- *         description: Lista de reservas del pasajero
- *       404:
- *         description: No se encontraron reservas para el pasajero
- */
-router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
-
-/**
- * @swagger
- * /api/reservas/{id}/status:
- *   put:
- *     summary: Actualiza el estatus de una reserva
+ *     summary: Obtiene todos los pasajeros de una reserva específica
  *     tags: [Reservaciones]
  *     parameters:
  *       - in: path
@@ -137,24 +120,12 @@ router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
  *           type: integer
  *         required: true
  *         description: ID de la reserva
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: boolean
- *                 example: false
  *     responses:
  *       200:
- *         description: Estatus de la reserva actualizado exitosamente
+ *         description: Lista de pasajeros de la reserva
  *       404:
  *         description: Reserva no encontrada
- *       500:
- *         description: Error al actualizar el estatus de la reserva
  */
-router.put('/:id/status', reservaController.updateReservaStatus);
+router.get('/:id/pasajeros', reservaController.getPasajerosByReservaId);
 
 module.exports = router;

@@ -4,7 +4,7 @@ module.exports = {
   // Crear una nueva reserva sin pasajeros
   async createReserva(req, res) {
     try {
-      const { codigoReserva, fechaInicio, fechaFinal, status } = req.body;
+      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
 
       // Verificar si ya existe una reserva con el mismo código
       const reservaExistente = await Reserva.findOne({ where: { codigoReserva } });
@@ -13,7 +13,7 @@ module.exports = {
       }
 
       // Crear la reserva sin pasajeros
-      const nuevaReserva = await Reserva.create({ codigoReserva, fechaInicio, fechaFinal, status });
+      const nuevaReserva = await Reserva.create({ codigoReserva, fechaInicio, fechaFinal });
       return res.status(201).json(nuevaReserva);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -24,7 +24,7 @@ module.exports = {
   async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo } = req.body; // ID del pasajero y detalles adicionales
+      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo, status } = req.body;
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
@@ -36,13 +36,13 @@ module.exports = {
         return res.status(404).json({ error: 'Pasajero no encontrado' });
       }
 
-      // Actualiza el pasajero con los detalles adicionales y lo asocia a la reserva
       await pasajero.update({
         pasaporte,
         asiento,
         numeroVuelo,
         claseVuelo,
         reservaId: id,
+        status,
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva con detalles', pasajero });
@@ -51,75 +51,43 @@ module.exports = {
     }
   },
 
-  // Obtener todas las reservas
-  async getReservas(req, res) {
+  // Obtener todas las reservas junto con la información completa de los pasajeros
+  async getReservasWithPasajeros(req, res) {
     try {
-      const reservas = await Reserva.findAll({
-        include: [{ model: Pasajero, as: 'pasajeros' }],
-      });
-      return res.status(200).json(reservas);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  },
-
-  // Obtener todas las reservas en las que participa un pasajero por ID de pasajero
-  async getReservasByPasajeroId(req, res) {
-    try {
-      const { pasajeroId } = req.params;
-
       const reservas = await Reserva.findAll({
         include: [
           {
             model: Pasajero,
             as: 'pasajeros',
-            where: { id: pasajeroId },
+            attributes: ['id', 'nombre', 'pasaporte', 'status', 'asiento', 'numeroVuelo', 'claseVuelo'],
           },
         ],
       });
-
-      if (!reservas.length) {
-        return res.status(404).json({ error: 'No se encontraron reservas para el pasajero' });
-      }
-
       return res.status(200).json(reservas);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   },
 
-  // Actualizar solo el estatus de una reserva por ID
-  async updateReservaStatus(req, res) {
+  // Obtener todos los pasajeros de una reserva específica
+  async getPasajerosByReservaId(req, res) {
     try {
       const { id } = req.params;
-      const { status } = req.body;
 
-      const reserva = await Reserva.findByPk(id);
-      if (!reserva) {
-        return res.status(404).json({ error: 'Reserva no encontrada' });
-      }
-
-      reserva.status = status;
-      await reserva.save();
-
-      return res.status(200).json(reserva);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  },
-
-  // Eliminar una reserva por ID
-  async deleteReserva(req, res) {
-    try {
-      const { id } = req.params;
-      const reserva = await Reserva.findByPk(id);
+      const reserva = await Reserva.findByPk(id, {
+        include: [
+          {
+            model: Pasajero,
+            as: 'pasajeros',
+          },
+        ],
+      });
 
       if (!reserva) {
         return res.status(404).json({ error: 'Reserva no encontrada' });
       }
 
-      await reserva.destroy();
-      return res.status(200).json({ message: 'Reserva eliminada correctamente' });
+      return res.status(200).json(reserva.pasajeros);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

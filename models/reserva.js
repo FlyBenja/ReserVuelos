@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
     status: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: true,
+      defaultValue: true, // Se puede agregar si deseas un campo de estado
     },
   });
 
