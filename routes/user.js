@@ -72,4 +72,25 @@ router.post('/', userController.createUser);
  */
 router.post('/login', userController.loginUser);
 
+/**
+ * @swagger
+ * /api/users/{id}:
+ *   get:
+ *     summary: Obtiene un usuario por su ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del usuario
+ *     responses:
+ *       200:
+ *         description: Usuario encontrado
+ *       404:
+ *         description: Usuario no encontrado
+ */
+router.get('/:id', userController.getUserById);
+
 module.exports = router;

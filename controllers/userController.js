@@ -1,5 +1,5 @@
 // controllers/userController.js
-const { User } = require('../models');
+const { User, Role } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const pasajeroController = require('./pasajeroController'); // Importa el controlador de Pasajero
@@ -57,6 +57,25 @@ module.exports = {
       const token = jwt.sign({ id: user.id, roleId: user.roleId }, JWT_SECRET, { expiresIn: '1h' });
 
       return res.status(200).json({ token });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Obtener un usuario por ID
+  async getUserById(req, res) {
+    try {
+      const { id } = req.params;
+
+      const user = await User.findByPk(id, {
+        include: [{ model: Role, as: 'role' }],
+      });
+
+      if (!user) {
+        return res.status(404).json({ error: 'Usuario no encontrado' });
+      }
+
+      return res.status(200).json(user);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
