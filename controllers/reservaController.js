@@ -24,7 +24,7 @@ module.exports = {
   async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeroId, asiento, numeroVuelo, claseVuelo } = req.body; // ID del pasajero y detalles adicionales
+      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo } = req.body; // ID del pasajero y detalles adicionales
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
@@ -38,6 +38,7 @@ module.exports = {
 
       // Actualiza el pasajero con los detalles adicionales y lo asocia a la reserva
       await pasajero.update({
+        pasaporte,
         asiento,
         numeroVuelo,
         claseVuelo,

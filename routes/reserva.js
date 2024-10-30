@@ -69,6 +69,9 @@ router.post('/', reservaController.createReserva);
  *               pasajeroId:
  *                 type: integer
  *                 example: 1
+ *               pasaporte:
+ *                 type: string
+ *                 example: "A1234567"
  *               asiento:
  *                 type: string
  *                 example: "12A"
