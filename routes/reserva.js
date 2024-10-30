@@ -83,6 +83,9 @@ router.post('/', reservaController.createReserva);
  *               claseVuelo:
  *                 type: string
  *                 example: "Primera Clase"
+ *               status:
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       201:
  *         description: Pasajero agregado a la reserva con detalles
@@ -127,5 +130,39 @@ router.get('/', reservaController.getReservasWithPasajeros);
  *         description: Reserva no encontrada
  */
 router.get('/:id/pasajeros', reservaController.getPasajerosByReservaId);
+
+// Actualizar estatus de un pasajero
+/**
+ * @swagger
+ * /api/reservas/pasajeros/{id}/status:
+ *   put:
+ *     summary: Actualiza el estatus de un pasajero
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del pasajero
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: boolean
+ *                 example: false
+ *     responses:
+ *       200:
+ *         description: Estatus del pasajero actualizado
+ *       404:
+ *         description: Pasajero no encontrado
+ *       500:
+ *         description: Error al actualizar el estatus
+ */
+router.put('/pasajeros/:id/status', reservaController.updatePasajeroStatus);
 
 module.exports = router;

@@ -92,4 +92,24 @@ module.exports = {
       return res.status(500).json({ error: error.message });
     }
   },
+
+  // Actualizar el estatus de un pasajero
+  async updatePasajeroStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { status } = req.body;
+
+      const pasajero = await Pasajero.findByPk(id);
+      if (!pasajero) {
+        return res.status(404).json({ error: 'Pasajero no encontrado' });
+      }
+
+      pasajero.status = status;
+      await pasajero.save();
+
+      return res.status(200).json({ message: 'Estatus del pasajero actualizado', pasajero });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
 };
