@@ -8,7 +8,7 @@ const swaggerOptions = {
       version: '1.0.0',
       description: 'API para gestionar reservas de vuelo',
     },
-    servers: [{ url: `http://localhost:${process.env.PORT || 3000}` }],
+    servers: [{ url: `https://reservuelos.onrender.com`}],
     components: {
       securitySchemes: {
         bearerAuth: {
