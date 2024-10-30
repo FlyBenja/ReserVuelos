@@ -32,9 +32,4 @@ module.exports = {
       console.warn("La tabla 'Roles' no existe. Asegúrate de ejecutar las migraciones primero.");
     }
   },
-
-  down: async (queryInterface, Sequelize) => {
-    // Eliminar el usuario
-    await queryInterface.bulkDelete('Users', { username: 'admin' }, {});
-  }
 };
