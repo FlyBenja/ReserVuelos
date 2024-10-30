@@ -3,10 +3,10 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Borra todos los registros en la tabla Users
-    await queryInterface.bulkDelete('Users', null, {});
+    // Elimina todos los usuarios
+    await queryInterface.bulkDelete('Users', {}, {});
 
-    // Inserta el usuario admin
+    // Insertar nuevo usuario
     const hashedPassword = await bcrypt.hash('admin', 10); // Hashea la contraseña
 
     await queryInterface.bulkInsert('Users', [{
@@ -19,7 +19,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    // Borra el usuario admin si es necesario
     await queryInterface.bulkDelete('Users', { username: 'admin' }, {});
   }
 };
