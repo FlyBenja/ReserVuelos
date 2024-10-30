@@ -15,7 +15,7 @@ const app = express();
 
 // Configuración de CORS
 app.use(cors({
-  origin: ["http://localhost:5173", "https://examen-final-wep.netlify.app"], // Dominios permitidos
+  origin: ["http://localhost:5173", "https://reservuelos.netlify.app"], // Dominios permitidos
   methods: ["GET", "POST", "PUT", "DELETE"], // Métodos permitidos
   allowedHeaders: ["Content-Type", "Authorization"], // Headers permitidos
 }));
