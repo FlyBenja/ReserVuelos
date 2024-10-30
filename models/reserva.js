@@ -15,10 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
+  // Definición de la asociación
   Reserva.associate = (models) => {
     Reserva.hasMany(models.Pasajero, {
-      foreignKey: 'reservaId',
-      as: 'pasajeros',
+      foreignKey: 'reservaId', // Cambia esto si el nombre de la clave foránea es diferente
+      as: 'pasajeros', // Alias para la asociación
     });
   };
 
