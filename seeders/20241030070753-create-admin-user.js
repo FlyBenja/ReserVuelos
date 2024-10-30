@@ -3,12 +3,10 @@ const bcrypt = require('bcrypt');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // Verificar si el usuario ya existe
-    const [results, metadata] = await queryInterface.sequelize.query(
+    const [results] = await queryInterface.sequelize.query(
       "SELECT * FROM Users WHERE username = 'admin'"
     );
 
-    // Solo insertar si el usuario no existe
     if (results.length === 0) {
       const hashedPassword = await bcrypt.hash('admin', 10); // Hashea la contraseña
 
