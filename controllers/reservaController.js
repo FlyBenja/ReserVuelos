@@ -12,8 +12,12 @@ module.exports = {
         return res.status(400).json({ error: 'Error.- Código de reserva ya existe' });
       }
 
-      // Crear la reserva sin pasajeros
-      const nuevaReserva = await Reserva.create({ codigoReserva, fechaInicio, fechaFinal });
+      // Crear la reserva sin el campo de estatus
+      const nuevaReserva = await Reserva.create({ 
+        codigoReserva, 
+        fechaInicio, 
+        fechaFinal 
+      });
       return res.status(201).json(nuevaReserva);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -24,7 +28,7 @@ module.exports = {
   async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo, status } = req.body;
+      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo } = req.body;
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
@@ -42,7 +46,6 @@ module.exports = {
         numeroVuelo,
         claseVuelo,
         reservaId: id,
-        status,
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva con detalles', pasajero });
@@ -59,7 +62,7 @@ module.exports = {
           {
             model: Pasajero,
             as: 'pasajeros',
-            attributes: ['id', 'nombre', 'pasaporte', 'status', 'asiento', 'numeroVuelo', 'claseVuelo'],
+            attributes: ['id', 'nombre', 'pasaporte', 'asiento', 'numeroVuelo', 'claseVuelo'],
           },
         ],
       });
