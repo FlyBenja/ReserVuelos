@@ -20,9 +20,13 @@ app.use(cors({
   allowedHeaders: ["Content-Type", "Authorization"], // Headers permitidos
 }));
 
+// Manejo de preflight para todas las rutas
+app.options('*', cors());
+
+// Middleware para analizar JSON en las solicitudes
 app.use(express.json());
 
-// Swagger setup
+// Configuración de Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Rutas sin autenticación (Users)
@@ -34,6 +38,7 @@ app.use('/api/clases-vuelo', authenticateToken([1]), claseVueloRoutes); // Acces
 app.use('/api/reservas', authenticateToken([1]), reservaRoutes);       // Accesible solo para roleId = 1
 app.use('/api/pasajeros', authenticateToken([2]), pasajeroRoutes);     // Accesible solo para roleId = 2
 
+// Iniciar el servidor en el puerto definido
 const PORT = process.env.PORT || 3000;
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
