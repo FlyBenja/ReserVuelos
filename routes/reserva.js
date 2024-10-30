@@ -34,9 +34,6 @@ const reservaController = require('../controllers/reservaController');
  *                 type: string
  *                 format: date
  *                 example: "2024-11-02"
- *               status:
- *                 type: boolean
- *                 example: true
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente
@@ -131,38 +128,26 @@ router.get('/', reservaController.getReservasWithPasajeros);
  */
 router.get('/:id/pasajeros', reservaController.getPasajerosByReservaId);
 
-// Actualizar estatus de un pasajero
+// Obtener todas las reservas de un pasajero específico
 /**
  * @swagger
- * /api/reservas/pasajeros/{id}/status:
- *   put:
- *     summary: Actualiza el estatus de un pasajero
+ * /api/reservas/pasajero/{pasajeroId}:
+ *   get:
+ *     summary: Obtiene todas las reservas de un pasajero específico
  *     tags: [Reservaciones]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: pasajeroId
  *         schema:
  *           type: integer
  *         required: true
  *         description: ID del pasajero
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               status:
- *                 type: boolean
- *                 example: false
  *     responses:
  *       200:
- *         description: Estatus del pasajero actualizado
+ *         description: Lista de reservas del pasajero
  *       404:
  *         description: Pasajero no encontrado
- *       500:
- *         description: Error al actualizar el estatus
  */
-router.put('/pasajeros/:id/status', reservaController.updatePasajeroStatus);
+router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
 
 module.exports = router;
