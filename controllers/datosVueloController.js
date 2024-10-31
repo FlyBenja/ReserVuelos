@@ -35,7 +35,7 @@ module.exports = {
     }
   },
 
-  // GET: Obtener todos los usuarios de una reserva específica (id_reserva)
+  // GET: Obtener todos los usuarios de una reserva específica (reserva_id)
   async getUsersByReserva(req, res) {
     try {
       const { reserva_id } = req.params;
@@ -48,15 +48,13 @@ module.exports = {
     }
   },
 
-  // UPDATE: Actualizar un DatoVuelo utilizando user_id y reserva_id
+  // UPDATE: Actualizar un DatoVuelo utilizando id (llave primaria)
   async updateDatosVuelo(req, res) {
     try {
-      const { user_id, reserva_id } = req.params;
+      const { id } = req.params;
       const { clasevuelo_id, pasaporte, asiento, status } = req.body;
 
-      const datosVuelo = await DatosVuelo.findOne({
-        where: { user_id, reserva_id },
-      });
+      const datosVuelo = await DatosVuelo.findByPk(id);
       if (!datosVuelo) {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }
@@ -73,13 +71,11 @@ module.exports = {
     }
   },
 
-  // DELETE: Eliminar un DatoVuelo utilizando user_id y reserva_id
+  // DELETE: Eliminar un DatoVuelo utilizando id (llave primaria)
   async deleteDatosVuelo(req, res) {
     try {
-      const { user_id, reserva_id } = req.params;
-      const datosVuelo = await DatosVuelo.findOne({
-        where: { user_id, reserva_id },
-      });
+      const { id } = req.params;
+      const datosVuelo = await DatosVuelo.findByPk(id);
       if (!datosVuelo) {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }

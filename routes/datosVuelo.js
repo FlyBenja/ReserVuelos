@@ -95,24 +95,18 @@ router.get('/usuario/:user_id', datosVueloController.getReservasByUser);
  */
 router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
 
-// UPDATE: Actualizar un DatoVuelo usando user_id y reserva_id
+// UPDATE: Actualizar un DatoVuelo usando id (llave primaria)
 /**
  * @swagger
- * /api/datos-vuelo/{user_id}/{reserva_id}:
+ * /api/datos-vuelo/{id}:
  *   put:
- *     summary: Actualiza un dato de vuelo utilizando user_id y reserva_id
+ *     summary: Actualiza un dato de vuelo utilizando el id (llave primaria)
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
- *         name: user_id
+ *         name: id
  *         required: true
- *         description: ID del usuario
- *         schema:
- *           type: integer
- *       - in: path
- *         name: reserva_id
- *         required: true
- *         description: ID de la reserva
+ *         description: ID del dato de vuelo
  *         schema:
  *           type: integer
  *     requestBody:
@@ -142,26 +136,20 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  *       500:
  *         description: Error al actualizar el dato de vuelo
  */
-router.put('/:user_id/:reserva_id', datosVueloController.updateDatosVuelo);
+router.put('/:id', datosVueloController.updateDatosVuelo);
 
-// DELETE: Eliminar un DatoVuelo usando user_id y reserva_id
+// DELETE: Eliminar un DatoVuelo usando id (llave primaria)
 /**
  * @swagger
- * /api/datos-vuelo/{user_id}/{reserva_id}:
+ * /api/datos-vuelo/{id}:
  *   delete:
- *     summary: Elimina un dato de vuelo utilizando user_id y reserva_id
+ *     summary: Elimina un dato de vuelo utilizando el id (llave primaria)
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
- *         name: user_id
+ *         name: id
  *         required: true
- *         description: ID del usuario
- *         schema:
- *           type: integer
- *       - in: path
- *         name: reserva_id
- *         required: true
- *         description: ID de la reserva
+ *         description: ID del dato de vuelo
  *         schema:
  *           type: integer
  *     responses:
@@ -172,6 +160,6 @@ router.put('/:user_id/:reserva_id', datosVueloController.updateDatosVuelo);
  *       500:
  *         description: Error al eliminar el dato de vuelo
  */
-router.delete('/:user_id/:reserva_id', datosVueloController.deleteDatosVuelo);
+router.delete('/:id', datosVueloController.deleteDatosVuelo);
 
 module.exports = router;
