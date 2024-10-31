@@ -1,4 +1,3 @@
-// migrations/20231030-create-reservas.js
 'use strict';
 
 module.exports = {
@@ -23,13 +22,13 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      pasajero_id: { // Esta columna es necesaria
+      user_id: { // Cambié esto para hacer referencia al usuario
         type: Sequelize.INTEGER,
         references: {
-          model: 'Pasajeros', // Asegúrate de que el nombre de la tabla sea correcto
+          model: 'Users', // Asegúrate de que el nombre de la tabla sea correcto
           key: 'id',
         },
-        allowNull: true, // Puedes ajustar esto según sea necesario
+        allowNull: false,
       },
       createdAt: {
         allowNull: false,

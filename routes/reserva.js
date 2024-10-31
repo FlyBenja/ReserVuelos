@@ -1,4 +1,3 @@
-// routes/reserva.js
 const express = require('express');
 const router = express.Router();
 const reservaController = require('../controllers/reservaController');
@@ -10,12 +9,12 @@ const reservaController = require('../controllers/reservaController');
  *   description: API para gestionar las reservaciones
  */
 
-// Crear una reserva
+// Crear una nueva reserva
 /**
  * @swagger
  * /api/reservas:
  *   post:
- *     summary: Crea una nueva reserva sin pasajeros
+ *     summary: Crea una nueva reserva
  *     tags: [Reservaciones]
  *     requestBody:
  *       required: true
@@ -35,30 +34,46 @@ const reservaController = require('../controllers/reservaController');
  *                 type: string
  *                 format: date
  *                 example: "2024-11-02"
+ *               user_id:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente
- *       400:
- *         description: Error.- Código de reserva ya existe
  *       500:
  *         description: Error al crear la reserva
  */
 router.post('/', reservaController.createReserva);
+
+// Obtener todas las reservas
+/**
+ * @swagger
+ * /api/reservas:
+ *   get:
+ *     summary: Obtiene todas las reservas
+ *     tags: [Reservaciones]
+ *     responses:
+ *       200:
+ *         description: Lista de reservas
+ *       500:
+ *         description: Error al obtener las reservas
+ */
+router.get('/', reservaController.getAllReservas);
 
 // Actualizar una reserva
 /**
  * @swagger
  * /api/reservas/{id}:
  *   put:
- *     summary: Actualiza una reserva sin pasajeros
+ *     summary: Actualiza una reserva
  *     tags: [Reservaciones]
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
  *         required: true
  *         description: ID de la reserva
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
@@ -87,20 +102,29 @@ router.post('/', reservaController.createReserva);
  */
 router.put('/:id', reservaController.updateReserva);
 
-// Obtener todas las reservas
+// Eliminar una reserva
 /**
  * @swagger
- * /api/reservas:
- *   get:
- *     summary: Obtiene todas las reservas sin pasajeros
+ * /api/reservas/{id}:
+ *   delete:
+ *     summary: Elimina una reserva
  *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID de la reserva
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
- *         description: Lista de reservas
+ *         description: Reserva eliminada correctamente
+ *       404:
+ *         description: Reserva no encontrada
  *       500:
- *         description: Error al obtener reservas
+ *         description: Error al eliminar la reserva
  */
-router.get('/', reservaController.getAllReservas);
+router.delete('/:id', reservaController.deleteReserva);
 
 // Agregar un pasajero a una reserva
 /**
@@ -112,10 +136,10 @@ router.get('/', reservaController.getAllReservas);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
  *         required: true
  *         description: ID de la reserva
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
@@ -151,7 +175,7 @@ router.get('/', reservaController.getAllReservas);
  */
 router.post('/:id/pasajero', reservaController.addPasajeroToReserva);
 
-// Obtener todos los pasajeros de una reserva
+// Obtener todos los pasajeros de una reserva específica
 /**
  * @swagger
  * /api/reservas/{id}/pasajeros:
@@ -161,10 +185,10 @@ router.post('/:id/pasajero', reservaController.addPasajeroToReserva);
  *     parameters:
  *       - in: path
  *         name: id
- *         schema:
- *           type: integer
  *         required: true
  *         description: ID de la reserva
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Lista de pasajeros
@@ -185,10 +209,10 @@ router.get('/:id/pasajeros', reservaController.getPasajerosByReserva);
  *     parameters:
  *       - in: path
  *         name: pasajeroId
- *         schema:
- *           type: integer
  *         required: true
  *         description: ID del pasajero
+ *         schema:
+ *           type: integer
  *     responses:
  *       200:
  *         description: Lista de reservas del pasajero
@@ -198,30 +222,6 @@ router.get('/:id/pasajeros', reservaController.getPasajerosByReserva);
  *         description: Error al obtener reservas
  */
 router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
-
-// Eliminar una reserva
-/**
- * @swagger
- * /api/reservas/{id}:
- *   delete:
- *     summary: Elimina una reserva
- *     tags: [Reservaciones]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID de la reserva
- *     responses:
- *       200:
- *         description: Reserva eliminada correctamente
- *       404:
- *         description: Reserva no encontrada
- *       500:
- *         description: Error al eliminar la reserva
- */
-router.delete('/:id', reservaController.deleteReserva);
 
 // Actualizar el estatus de un pasajero
 /**
@@ -233,10 +233,10 @@ router.delete('/:id', reservaController.deleteReserva);
  *     parameters:
  *       - in: path
  *         name: pasajeroId
- *         schema:
- *           type: integer
  *         required: true
  *         description: ID del pasajero
+ *         schema:
+ *           type: integer
  *     requestBody:
  *       required: true
  *       content:
