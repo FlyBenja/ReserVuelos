@@ -22,6 +22,20 @@ module.exports = {
     }
   },
 
+  // Obtener un pasajero por ID
+  async getPasajeroById(req, res) {
+    try {
+      const { id } = req.params;
+      const pasajero = await Pasajero.findByPk(id);
+      if (!pasajero) {
+        return res.status(404).json({ error: 'Pasajero no encontrado' });
+      }
+      return res.status(200).json(pasajero);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
   // Eliminar un pasajero por ID
   async deletePasajero(req, res) {
     try {
