@@ -1,3 +1,4 @@
+// models/reserva.js
 module.exports = (sequelize, DataTypes) => {
   const Reserva = sequelize.define('Reserva', {
     codigoReserva: {
@@ -13,13 +14,13 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    pasajero_id: { // Este debe estar aquí
+    pasajero_id: { // Este debe ser opcional
       type: DataTypes.INTEGER,
       references: {
         model: 'Pasajeros',
         key: 'id',
       },
-      allowNull: true, // Cambia a true si puedes tener reservas sin pasajero
+      allowNull: true, // Permitir nulos
     },
     createdAt: {
       type: DataTypes.DATE,
