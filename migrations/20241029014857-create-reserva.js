@@ -36,4 +36,8 @@ module.exports = {
       },
     });
   },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('Reservas'); // Elimina la tabla 'Reservas'
+  },
 };

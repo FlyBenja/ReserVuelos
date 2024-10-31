@@ -27,4 +27,8 @@ module.exports = {
       },
     });
   },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('ClaseVuelos'); // Elimina la tabla 'ClaseVuelos' al revertir
+  },
 };

@@ -63,4 +63,8 @@ module.exports = {
       },
     });
   },
+
+  async down(queryInterface, Sequelize) {
+    await queryInterface.dropTable('DatosVuelos'); // Elimina la tabla 'DatosVuelos' al revertir
+  },
 };
