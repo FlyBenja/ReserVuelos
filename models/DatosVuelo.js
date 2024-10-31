@@ -1,37 +1,46 @@
-// models/datosVuelo.js
-
+// models/DatosVuelo.js
 module.exports = (sequelize, DataTypes) => {
   const DatosVuelo = sequelize.define('DatosVuelo', {
-    user_id: {
+    id_user: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
     pasaporte: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
     asiento: {
       type: DataTypes.STRING,
-      allowNull: false,
+      allowNull: true,
     },
-    reserva_id: {
+    id_reserva: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    clasevuelo_id: {
+    id_classvuelo: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    status: {
+    estado: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
       defaultValue: true,
     },
   });
 
   DatosVuelo.associate = (models) => {
-    DatosVuelo.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
-    DatosVuelo.belongsTo(models.Reserva, { foreignKey: 'reserva_id', as: 'reserva' });
-    DatosVuelo.belongsTo(models.ClaseVuelo, { foreignKey: 'clasevuelo_id', as: 'claseVuelo' });
+    DatosVuelo.belongsTo(models.Reserva, {
+      foreignKey: 'id_reserva',
+      as: 'reserva',
+    });
+    DatosVuelo.belongsTo(models.User, {
+      foreignKey: 'id_user',
+      as: 'usuario',
+    });
+    DatosVuelo.belongsTo(models.ClaseVuelo, {
+      foreignKey: 'id_classvuelo',
+      as: 'claseVuelo',
+    });
   };
 
   return DatosVuelo;

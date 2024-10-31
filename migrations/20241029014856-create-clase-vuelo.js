@@ -1,5 +1,3 @@
-// migrations/20241029124567-create-clasevuelo.js
-
 'use strict';
 
 module.exports = {
@@ -9,26 +7,23 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.INTEGER
       },
       nombreClase: {
         type: Sequelize.STRING,
-        allowNull: false,
+        unique: true
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
+        type: Sequelize.DATE
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
-      },
+        type: Sequelize.DATE
+      }
     });
   },
-
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('ClaseVuelos');
-  },
+  }
 };

@@ -1,55 +1,39 @@
-// migrations/20241029123456-create-datosvuelo.js
-
+// Migración para DatosVuelo
 'use strict';
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('DatosVuelos', {
+    await queryInterface.createTable('DatosVuelo', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      user_id: {
+      id_user: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Users', // Asegúrate de que el nombre de la tabla de usuarios sea 'Users'
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
       },
       pasaporte: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
       asiento: {
         type: Sequelize.STRING,
-        allowNull: false,
+        allowNull: true,
       },
-      reserva_id: {
+      id_reserva: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'Reservas', // Nombre de la tabla de reservas
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
       },
-      clasevuelo_id: {
+      id_classvuelo: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: {
-          model: 'ClaseVuelos', // Nombre de la tabla de clases de vuelo
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
       },
-      status: {
+      estado: {
         type: Sequelize.BOOLEAN,
-        defaultValue: true,
         allowNull: false,
+        defaultValue: true, // true = Confirmado, false = Cancelado
       },
       createdAt: {
         allowNull: false,
@@ -65,6 +49,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('DatosVuelos');
+    await queryInterface.dropTable('DatosVuelo');
   },
 };
