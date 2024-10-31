@@ -9,6 +9,7 @@ const pasajeroController = require('../controllers/pasajeroController');
  *   description: API para gestionar los pasajeros
  */
 
+// Obtener todos los pasajeros
 /**
  * @swagger
  * /api/pasajeros:
@@ -21,6 +22,7 @@ const pasajeroController = require('../controllers/pasajeroController');
  */
 router.get('/', pasajeroController.getPasajeros);
 
+// Obtener un pasajero por ID
 /**
  * @swagger
  * /api/pasajeros/{id}:
@@ -42,6 +44,7 @@ router.get('/', pasajeroController.getPasajeros);
  */
 router.get('/:id', pasajeroController.getPasajeroById);
 
+// Crear un nuevo pasajero
 /**
  * @swagger
  * /api/pasajeros:
@@ -68,6 +71,7 @@ router.get('/:id', pasajeroController.getPasajeroById);
  */
 router.post('/', pasajeroController.createPasajeroForUser);
 
+// Eliminar un pasajero por ID
 /**
  * @swagger
  * /api/pasajeros/{id}:
