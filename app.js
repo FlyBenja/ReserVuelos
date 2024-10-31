@@ -25,10 +25,8 @@ app.use(express.json());
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Rutas sin autenticación
+// Rutas
 app.use('/api/users', userRoutes);
-
-// Rutas para recursos específicos
 app.use('/api/roles', roleRoutes);
 app.use('/api/clases-vuelo', claseVueloRoutes);
 app.use('/api/reservas', reservaRoutes);
