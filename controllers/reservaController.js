@@ -5,9 +5,9 @@ module.exports = {
   async createReserva(req, res) {
     try {
       const nuevaReserva = await Reserva.create({
-        codigoReserva: "RSV12345", // Cambiado a fijo
-        fechaInicio: "2024-10-28", // Cambiado a fijo
-        fechaFinal: "2024-11-02" // Cambiado a fijo
+        codigoReserva: "RSV12345", // Fijo
+        fechaInicio: "2024-10-28", // Fijo
+        fechaFinal: "2024-11-02" // Fijo
       });
       console.log("Reserva creada exitosamente.");
       return res.status(201).json(nuevaReserva);

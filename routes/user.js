@@ -98,7 +98,7 @@ router.delete('/:id', userController.deleteUser);
  *             properties:
  *               username:
  *                 type: string
- *                 example: "benja"
+ *                 example: "admin"
  *               password:
  *                 type: string
  *                 example: "admin"
