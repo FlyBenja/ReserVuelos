@@ -2,15 +2,14 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    // Esto puede quedar vacío o contener operaciones adicionales
+    // Este archivo no crea ninguna tabla, solo se usa para eliminar en orden
   },
 
   async down(queryInterface, Sequelize) {
-    // Elimina primero las tablas que tienen claves foráneas
-    await queryInterface.dropTable('DatosVuelos');
-    await queryInterface.dropTable('Reservas');
-    await queryInterface.dropTable('ClaseVuelos');
-    await queryInterface.dropTable('Users');
-    await queryInterface.dropTable('Roles');
+    // Eliminar tablas en orden inverso para evitar errores de dependencias
+    await queryInterface.dropTable('DatosVuelos'); // Primero se elimina 'DatosVuelos'
+    await queryInterface.dropTable('ClaseVuelos'); // Luego se elimina 'ClaseVuelos'
+    await queryInterface.dropTable('Reservas'); // Luego se elimina 'Reservas'
+    await queryInterface.dropTable('Users'); // Finalmente se elimina 'Users' si es necesario
   },
 };

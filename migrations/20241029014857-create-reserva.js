@@ -38,6 +38,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Reservas'); // Luego se elimina 'Reservas'
-  },
+    await queryInterface.dropTable('Reservas', { cascade: true }); // Fuerza la eliminación
+  },  
 };
