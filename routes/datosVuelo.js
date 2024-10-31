@@ -1,8 +1,7 @@
-// routes/datosVueloRoutes.js
+// routes/datosVuelo.js
 const express = require('express');
 const router = express.Router();
 const datosVueloController = require('../controllers/datosVueloController');
-const { authenticateToken } = require('../Middleware/authenticateToken');
 
 /**
  * @swagger
@@ -18,8 +17,6 @@ const { authenticateToken } = require('../Middleware/authenticateToken');
  *   post:
  *     summary: Crea un nuevo dato de vuelo
  *     tags: [DatosVuelo]
- *     security:
- *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -36,19 +33,13 @@ const { authenticateToken } = require('../Middleware/authenticateToken');
  *               asiento:
  *                 type: string
  *                 example: "12A"
- *               reserva_id:
- *                 type: integer
- *                 example: 2
- *               id_classvuelo:
- *                 type: integer
- *                 example: 1
  *     responses:
  *       201:
  *         description: Dato de vuelo creado exitosamente
  *       500:
  *         description: Error al crear el dato de vuelo
  */
-router.post('/', authenticateToken([1, 2]), datosVueloController.createDatosVuelo);
+router.post('/', datosVueloController.createDatosVuelo);
 
 // Obtener todos los DatosVuelo
 /**
@@ -57,15 +48,13 @@ router.post('/', authenticateToken([1, 2]), datosVueloController.createDatosVuel
  *   get:
  *     summary: Obtiene todos los datos de vuelo
  *     tags: [DatosVuelo]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de datos de vuelo
  *       500:
  *         description: Error al obtener los datos de vuelo
  */
-router.get('/', authenticateToken([1]), datosVueloController.getAllDatosVuelo);
+router.get('/', datosVueloController.getAllDatosVuelo);
 
 // Actualizar un DatoVuelo
 /**
@@ -74,8 +63,6 @@ router.get('/', authenticateToken([1]), datosVueloController.getAllDatosVuelo);
  *   put:
  *     summary: Actualiza un dato de vuelo
  *     tags: [DatosVuelo]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -104,7 +91,7 @@ router.get('/', authenticateToken([1]), datosVueloController.getAllDatosVuelo);
  *       500:
  *         description: Error al actualizar el dato de vuelo
  */
-router.put('/:id', authenticateToken([1, 2]), datosVueloController.updateDatosVuelo);
+router.put('/:id', datosVueloController.updateDatosVuelo);
 
 // Eliminar un DatoVuelo
 /**
@@ -113,8 +100,6 @@ router.put('/:id', authenticateToken([1, 2]), datosVueloController.updateDatosVu
  *   delete:
  *     summary: Elimina un dato de vuelo
  *     tags: [DatosVuelo]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - in: path
  *         name: id
@@ -130,7 +115,6 @@ router.put('/:id', authenticateToken([1, 2]), datosVueloController.updateDatosVu
  *       500:
  *         description: Error al eliminar el dato de vuelo
  */
-router.delete('/:id', authenticateToken([1]), datosVueloController.deleteDatosVuelo);
+router.delete('/:id', datosVueloController.deleteDatosVuelo);
 
 module.exports = router;
-x

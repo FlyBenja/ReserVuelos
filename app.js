@@ -1,3 +1,4 @@
+// app.js
 require('dotenv').config();
 const express = require('express');
 const swaggerUi = require('swagger-ui-express');
@@ -8,8 +9,7 @@ const reservaRoutes = require('./routes/reserva');
 const claseVueloRoutes = require('./routes/claseVuelo');
 const userRoutes = require('./routes/user');
 const roleRoutes = require('./routes/role');
-const datosVueloRoutes = require('./routes/datosVueloRoutes'); // Nueva ruta
-const { authenticateToken } = require('./Middleware/authenticateToken');
+const datosVueloRoutes = require('./routes/datosVuelo'); // Agregar ruta de DatosVuelo
 
 const app = express();
 
@@ -25,16 +25,15 @@ app.use(express.json());
 // Swagger setup
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-// Rutas sin autenticación (Users)
-app.use('/api/users', userRoutes); // Rutas públicas para creación y login de usuarios
+// Rutas sin autenticación
+app.use('/api/users', userRoutes);
 
-// Rutas protegidas con autenticación y roles específicos
-app.use('/api/roles', authenticateToken([1]), roleRoutes); // Solo para roleId = 1 (Admin)
-app.use('/api/clases-vuelo', authenticateToken([1]), claseVueloRoutes); // Solo para roleId = 1
-app.use('/api/reservas', authenticateToken([1, 2]), reservaRoutes); // Para roleId = 1 y roleId = 2
-app.use('/api/datos-vuelo', authenticateToken([1, 2]), datosVueloRoutes); // Nueva ruta para DatosVuelo
+// Rutas para recursos específicos
+app.use('/api/roles', roleRoutes);
+app.use('/api/clases-vuelo', claseVueloRoutes);
+app.use('/api/reservas', reservaRoutes);
+app.use('/api/datos-vuelo', datosVueloRoutes); // Agregar ruta de DatosVuelo
 
-// Configuración del puerto
 const PORT = process.env.PORT || 3000;
 db.sequelize.sync().then(() => {
   app.listen(PORT, () => console.log(`Servidor corriendo en el puerto ${PORT}`));
