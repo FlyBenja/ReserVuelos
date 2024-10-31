@@ -1,3 +1,4 @@
+// migrations/20231030-create-reservas.js
 'use strict';
 
 module.exports = {
@@ -25,12 +26,12 @@ module.exports = {
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Valor predeterminado
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Valor predeterminado para creación
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
-        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP'), // Valor predeterminado
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Valor predeterminado para creación
       },
     });
   },
