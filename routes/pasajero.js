@@ -22,28 +22,6 @@ const pasajeroController = require('../controllers/pasajeroController');
  */
 router.get('/', pasajeroController.getPasajeros);
 
-// Obtener un pasajero por ID
-/**
- * @swagger
- * /api/pasajeros/{id}:
- *   get:
- *     summary: Obtiene un pasajero por ID
- *     tags: [Pasajeros]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID del pasajero
- *     responses:
- *       200:
- *         description: Pasajero encontrado
- *       404:
- *         description: Pasajero no encontrado
- */
-router.get('/:id', pasajeroController.getPasajeroById);
-
 // Crear un nuevo pasajero
 /**
  * @swagger
