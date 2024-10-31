@@ -23,7 +23,10 @@ module.exports = {
       });
 
       // Crear el pasajero asociado al nuevo usuario
-      const newPasajero = await pasajeroController.createPasajeroForUser(newUser.id);
+      const newPasajero = await Pasajero.create({
+        user_id: newUser.id // Establecer la relación aquí
+      });
+      
       return res.status(201).json({ user: newUser, pasajero: newPasajero });
     } catch (error) {
       return res.status(500).json({ error: error.message });

@@ -1,4 +1,3 @@
-// models/reserva.js
 module.exports = (sequelize, DataTypes) => {
   const Reserva = sequelize.define('Reserva', {
     codigoReserva: {
@@ -14,22 +13,30 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
+    pasajero_id: { // Cambié esto para hacer referencia al pasajero
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Pasajeros', // Asegúrate de que el nombre de la tabla sea correcto
+        key: 'id',
+      },
+      allowNull: false,
+    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW, // Valor predeterminado
+      defaultValue: DataTypes.NOW,
     },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW, // Valor predeterminado
+      defaultValue: DataTypes.NOW,
     },
   });
 
   Reserva.associate = (models) => {
-    Reserva.hasMany(models.Pasajero, {
-      foreignKey: 'reservaId',
-      as: 'pasajeros',
+    Reserva.belongsTo(models.Pasajero, {
+      foreignKey: 'pasajero_id',
+      as: 'pasajero',
     });
   };
 

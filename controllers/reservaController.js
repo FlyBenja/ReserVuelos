@@ -62,14 +62,15 @@ module.exports = {
         return res.status(404).json({ error: 'Reserva no encontrada' });
       }
 
+      // Crear el pasajero asociado a la reserva
       const nuevoPasajero = await Pasajero.create({
-        reservaId: id, // Aquí se asigna la reserva
         user_id, // Asegúrate de usar el user_id correcto
         pasaporte,
         asiento,
         numeroVuelo,
         claseVuelo,
         status,
+        reserva_id: id, // Cambié esto para vincular la reserva
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva', pasajero: nuevoPasajero });
