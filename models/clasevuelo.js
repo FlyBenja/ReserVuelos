@@ -7,12 +7,5 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  ClaseVuelo.associate = (models) => {
-    ClaseVuelo.hasMany(models.Reserva, {
-      foreignKey: 'claseVueloId',
-      as: 'reservas',
-    });
-  };
-
   return ClaseVuelo;
 };
