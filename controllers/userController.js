@@ -1,6 +1,7 @@
 // controllers/userController.js
-const { User, Role, Pasajero } = require('../models'); 
+const { User, Role, Pasajero, Reserva } = require('../models');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken'); // Asegúrate de incluir esta línea
 const pasajeroController = require('./pasajeroController');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
@@ -23,7 +24,7 @@ module.exports = {
       });
 
       // Crear el pasajero asociado al nuevo usuario
-      await pasajeroController.createPasajeroForUser(newUser.id); // Crea el pasajero
+      await pasajeroController.createPasajeroForUser(newUser.id);
       return res.status(201).json(newUser);
     } catch (error) {
       return res.status(500).json({ error: error.message });

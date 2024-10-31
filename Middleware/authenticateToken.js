@@ -26,4 +26,9 @@ function authenticateToken(roles = []) {
   };
 }
 
-module.exports = authenticateToken;
+// Función para generar un nuevo token con duración de 1 hora
+function generateToken(user) {
+  return jwt.sign({ id: user.id, roleId: user.roleId }, JWT_SECRET, { expiresIn: '1h' });
+}
+
+module.exports = { authenticateToken, generateToken };
