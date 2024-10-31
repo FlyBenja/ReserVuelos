@@ -24,7 +24,6 @@ const swaggerOptions = {
       { name: 'Users', description: 'API para gestionar los usuarios y autenticación' },
       { name: 'Clases de Vuelo', description: 'API para gestionar las clases de vuelo' },
       { name: 'Reservaciones', description: 'API para gestionar las reservaciones' },
-      { name: 'Pasajeros', description: 'API para gestionar los pasajeros' },
     ],
   },
   apis: ['./routes/*.js'],

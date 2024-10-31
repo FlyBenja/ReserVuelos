@@ -1,11 +1,12 @@
-const { User, Role, Pasajero } = require('../models');
+'use strict';
+
+const { User, Role } = require('../models'); 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); 
-const pasajeroController = require('./pasajeroController');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 module.exports = {
-  // Crear un nuevo usuario y un pasajero relacionado
+  // Crear un nuevo usuario
   async createUser(req, res) {
     try {
       const { username, password, roleId } = req.body;
@@ -21,13 +22,8 @@ module.exports = {
         password: hashedPassword,
         roleId,
       });
-
-      // Crear el pasajero asociado al nuevo usuario
-      const newPasajero = await Pasajero.create({
-        user_id: newUser.id // Establecer la relación aquí
-      });
       
-      return res.status(201).json({ user: newUser, pasajero: newPasajero });
+      return res.status(201).json({ user: newUser }); 
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -52,8 +48,6 @@ module.exports = {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
 
-      // Eliminar los pasajeros asociados al usuario
-      await Pasajero.destroy({ where: { user_id: id } });
       await user.destroy();
       return res.status(200).json({ message: 'Usuario eliminado correctamente' });
     } catch (error) {
