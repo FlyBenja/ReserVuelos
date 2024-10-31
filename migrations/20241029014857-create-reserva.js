@@ -22,6 +22,7 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      // Se han eliminado los campos createdAt y updatedAt
     });
   },
   async down(queryInterface, Sequelize) {

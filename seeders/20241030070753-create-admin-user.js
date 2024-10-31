@@ -10,7 +10,9 @@ module.exports = {
     await queryInterface.bulkInsert('Users', [{
       username: 'admin',
       password: hashedPassword,
-      roleId: 1
+      roleId: 1, // Asignar roleId = 1 fijo
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]);
 
     console.log("Usuario 'admin' creado exitosamente.");
