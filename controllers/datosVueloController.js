@@ -3,29 +3,64 @@
 const { DatosVuelo } = require('../models');
 
 module.exports = {
-  // Primer POST: Crear un nuevo DatoVuelo solo con id_user
-  async createBasicDatosVuelo(req, res) {
+  // POST: Crear un nuevo DatoVuelo con todos los campos necesarios, incluyendo user_id
+  async createDatosVuelo(req, res) {
     try {
-      const { user_id } = req.body;
-      const nuevoDatosVuelo = await DatosVuelo.create({ user_id });
+      const { user_id, reserva_id, clasevuelo_id, pasaporte, asiento, status } = req.body;
+
+      const nuevoDatosVuelo = await DatosVuelo.create({
+        user_id,
+        reserva_id,
+        clasevuelo_id,
+        pasaporte,
+        asiento,
+        status,
+      });
       return res.status(201).json(nuevoDatosVuelo);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   },
 
-  // Segundo POST: Actualizar un DatoVuelo con detalles adicionales
-  async updateDatosVueloDetails(req, res) {
+  // GET: Obtener todas las reservas de un usuario (user_id)
+  async getReservasByUser(req, res) {
     try {
-      const { id } = req.params;
-      const { reserva_id, clasevuelo_id, pasaporte, asiento, status } = req.body;
+      const { user_id } = req.params;
+      const datosVuelos = await DatosVuelo.findAll({
+        where: { user_id },
+      });
+      return res.status(200).json(datosVuelos);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
 
-      const datosVuelo = await DatosVuelo.findByPk(id);
+  // GET: Obtener todos los usuarios de una reserva específica (id_reserva)
+  async getUsersByReserva(req, res) {
+    try {
+      const { reserva_id } = req.params;
+      const datosVuelos = await DatosVuelo.findAll({
+        where: { reserva_id },
+      });
+      return res.status(200).json(datosVuelos);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // UPDATE: Actualizar un DatoVuelo utilizando user_id y reserva_id
+  async updateDatosVuelo(req, res) {
+    try {
+      const { user_id, reserva_id } = req.params;
+      const { clasevuelo_id, pasaporte, asiento, status } = req.body;
+
+      const datosVuelo = await DatosVuelo.findOne({
+        where: { user_id, reserva_id },
+      });
       if (!datosVuelo) {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }
 
-      datosVuelo.reserva_id = reserva_id;
       datosVuelo.clasevuelo_id = clasevuelo_id;
       datosVuelo.pasaporte = pasaporte;
       datosVuelo.asiento = asiento;
@@ -38,35 +73,13 @@ module.exports = {
     }
   },
 
-  // Obtener todos los DatosVuelo
-  async getAllDatosVuelo(req, res) {
-    try {
-      const datosVuelos = await DatosVuelo.findAll();
-      return res.status(200).json(datosVuelos);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  },
-
-  // Obtener información de un pasajero específico
-  async getDatosVueloById(req, res) {
-    try {
-      const { id } = req.params;
-      const datosVuelo = await DatosVuelo.findByPk(id);
-      if (!datosVuelo) {
-        return res.status(404).json({ error: 'DatosVuelo no encontrado' });
-      }
-      return res.status(200).json(datosVuelo);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  },
-
-  // Eliminar un DatoVuelo
+  // DELETE: Eliminar un DatoVuelo utilizando user_id y reserva_id
   async deleteDatosVuelo(req, res) {
     try {
-      const { id } = req.params;
-      const datosVuelo = await DatosVuelo.findByPk(id);
+      const { user_id, reserva_id } = req.params;
+      const datosVuelo = await DatosVuelo.findOne({
+        where: { user_id, reserva_id },
+      });
       if (!datosVuelo) {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }
