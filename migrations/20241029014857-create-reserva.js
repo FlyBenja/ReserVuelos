@@ -23,6 +23,16 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      createdAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Agrega el valor predeterminado
+      },
+      updatedAt: {
+        allowNull: false,
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'), // Agrega el valor predeterminado
+      },
     });
   },
 
