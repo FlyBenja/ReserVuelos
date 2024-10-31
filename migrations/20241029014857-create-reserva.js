@@ -1,3 +1,5 @@
+// migrations/20241029014857-create-reserva.js
+
 'use strict';
 
 module.exports = {
@@ -21,11 +23,6 @@ module.exports = {
       fechaFinal: {
         type: Sequelize.DATE,
         allowNull: false,
-      },
-      estado: { // Campo para estado de la reserva (Confirmado o Cancelado)
-        type: Sequelize.BOOLEAN,
-        allowNull: false,
-        defaultValue: true, // Confirmado por defecto
       },
       createdAt: {
         allowNull: false,
