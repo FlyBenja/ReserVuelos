@@ -55,7 +55,7 @@ module.exports = {
   async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo, status = true } = req.body;
+      const { user_id, pasaporte, asiento, numeroVuelo, claseVuelo, status = true } = req.body;
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
@@ -63,8 +63,8 @@ module.exports = {
       }
 
       const nuevoPasajero = await Pasajero.create({
-        reservaId: id,
-        pasajeroId,
+        reservaId: id, // Aquí se asigna la reserva
+        user_id, // Asegúrate de usar el user_id correcto
         pasaporte,
         asiento,
         numeroVuelo,
@@ -102,7 +102,7 @@ module.exports = {
       const { pasajeroId } = req.params;
 
       const reservas = await Reserva.findAll({
-        include: [{ model: Pasajero, as: 'pasajeros', where: { id: pasajeroId } }],
+        include: [{ model: Pasajero, as: 'pasajeros', where: { user_id: pasajeroId } }],
       });
 
       if (!reservas.length) {
@@ -130,6 +130,24 @@ module.exports = {
       await pasajero.save();
 
       return res.status(200).json({ message: 'Estatus del pasajero actualizado', pasajero });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Eliminar una reserva sin pasajeros
+  async deleteReserva(req, res) {
+    try {
+      const { id } = req.params;
+
+      const reserva = await Reserva.findByPk(id);
+      if (!reserva) {
+        return res.status(404).json({ error: 'Reserva no encontrada' });
+      }
+
+      // Eliminar la reserva
+      await reserva.destroy();
+      return res.status(200).json({ message: 'Reserva eliminada correctamente' });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

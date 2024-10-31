@@ -69,4 +69,27 @@ router.get('/:id', pasajeroController.getPasajeroById);
  */
 router.post('/', pasajeroController.createPasajeroForUser);
 
+/**
+ * @swagger
+ * /api/pasajeros/{id}:
+ *   delete:
+ *     summary: Elimina un pasajero por ID
+ *     tags: [Pasajeros]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del pasajero
+ *     responses:
+ *       200:
+ *         description: Pasajero eliminado correctamente
+ *       404:
+ *         description: Pasajero no encontrado
+ *       500:
+ *         description: Error al eliminar el pasajero
+ */
+router.delete('/:id', pasajeroController.deletePasajero);
+
 module.exports = router;

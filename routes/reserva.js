@@ -123,7 +123,7 @@ router.get('/', reservaController.getAllReservas);
  *           schema:
  *             type: object
  *             properties:
- *               pasajeroId:
+ *               user_id:
  *                 type: integer
  *                 example: 1
  *               pasaporte:
@@ -232,5 +232,29 @@ router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
  *         description: Error al actualizar el estatus
  */
 router.put('/pasajeros/:pasajeroId/status', reservaController.updatePasajeroStatus);
+
+// Eliminar una reserva
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *   delete:
+ *     summary: Elimina una reserva por ID
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     responses:
+ *       200:
+ *         description: Reserva eliminada correctamente
+ *       404:
+ *         description: Reserva no encontrada
+ *       500:
+ *         description: Error al eliminar la reserva
+ */
+router.delete('/:id', reservaController.deleteReserva);
 
 module.exports = router;

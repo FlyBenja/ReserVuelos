@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     user_id: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      unique: true,
       references: {
         model: 'Users',
         key: 'id',
@@ -16,6 +15,26 @@ module.exports = (sequelize, DataTypes) => {
         model: 'Reservas',
         key: 'id',
       },
+    },
+    pasaporte: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    asiento: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    numeroVuelo: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    claseVuelo: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    status: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
     },
   });
 
