@@ -20,17 +20,9 @@ module.exports = {
         },
         onDelete: 'CASCADE',
       },
-      pasaporte: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      asiento: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       reserva_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true, // Permitimos que sea nulo en la primera inserción
         references: {
           model: 'Reservas', // Nombre de la tabla de reservas
           key: 'id',
@@ -39,12 +31,20 @@ module.exports = {
       },
       clasevuelo_id: {
         type: Sequelize.INTEGER,
-        allowNull: false,
+        allowNull: true, // Permitimos que sea nulo en la primera inserción
         references: {
           model: 'ClaseVuelos', // Nombre de la tabla de clases de vuelo
           key: 'id',
         },
         onDelete: 'CASCADE',
+      },
+      pasaporte: {
+        type: Sequelize.STRING,
+        allowNull: true, // Permitimos que sea nulo en la primera inserción
+      },
+      asiento: {
+        type: Sequelize.STRING,
+        allowNull: true, // Permitimos que sea nulo en la primera inserción
       },
       status: {
         type: Sequelize.BOOLEAN,
@@ -65,6 +65,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('DatosVuelos'); // Primero se elimina 'DatosVuelos'
+    await queryInterface.dropTable('DatosVuelos');
   },
 };
