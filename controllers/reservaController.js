@@ -1,17 +1,16 @@
 // controllers/reservaController.js
-const { Reserva, User } = require('../models');
+const { Reserva } = require('../models');
 
 module.exports = {
   // Crear una nueva reserva
   async createReserva(req, res) {
     try {
-      const { codigoReserva, fechaInicio, fechaFinal, user_id } = req.body; // Incluye user_id en el cuerpo de la solicitud
+      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
 
       const nuevaReserva = await Reserva.create({
         codigoReserva,
         fechaInicio,
         fechaFinal,
-        user_id, // Relaciona la reserva con el usuario
       });
       console.log("Reserva creada exitosamente.");
       return res.status(201).json(nuevaReserva);
@@ -23,7 +22,7 @@ module.exports = {
   // Actualizar una reserva
   async updateReserva(req, res) {
     try {
-      const { id } = req.params; // ID de la reserva
+      const { id } = req.params;
       const { codigoReserva, fechaInicio, fechaFinal } = req.body;
 
       const reserva = await Reserva.findByPk(id);
@@ -55,7 +54,7 @@ module.exports = {
   // Eliminar una reserva
   async deleteReserva(req, res) {
     try {
-      const { id } = req.params; // ID de la reserva
+      const { id } = req.params;
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
         return res.status(404).json({ error: 'Reserva no encontrada' });

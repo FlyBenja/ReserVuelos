@@ -34,9 +34,6 @@ const reservaController = require('../controllers/reservaController');
  *                 type: string
  *                 format: date
  *                 example: "2024-11-02"
- *               user_id:
- *                 type: integer
- *                 example: 1
  *     responses:
  *       201:
  *         description: Reserva creada exitosamente

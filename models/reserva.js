@@ -13,14 +13,6 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    user_id: { // Ahora referencia a Users
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'Users',
-        key: 'id',
-      },
-      allowNull: false,
-    },
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -32,13 +24,6 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.NOW,
     },
   });
-
-  Reserva.associate = (models) => {
-    Reserva.belongsTo(models.User, {
-      foreignKey: 'user_id',
-      as: 'user', // Cambié el alias
-    });
-  };
 
   return Reserva;
 };

@@ -22,14 +22,6 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
-      user_id: { // Cambié esto para hacer referencia al usuario
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Users', // Asegúrate de que el nombre de la tabla sea correcto
-          key: 'id',
-        },
-        allowNull: false,
-      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
