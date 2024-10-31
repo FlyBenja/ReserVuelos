@@ -5,7 +5,6 @@ module.exports = {
   // Crear un pasajero asociado a un nuevo usuario
   async createPasajeroForUser(userId) {
     try {
-      // Crear el pasajero sin necesidad de asignar un reservaId
       const newPasajero = await Pasajero.create({ user_id: userId });
       return newPasajero;
     } catch (error) {
@@ -20,19 +19,14 @@ module.exports = {
       const { id } = req.params; // ID de la reserva
       const { user_id, pasaporte, asiento, numeroVuelo, claseVuelo, status = true } = req.body;
 
-      const reserva = await Reserva.findByPk(id);
-      if (!reserva) {
-        return res.status(404).json({ error: 'Reserva no encontrada' });
-      }
-
       const nuevoPasajero = await Pasajero.create({
         reservaId: id, // Aquí se asigna la reserva
-        user_id, // Asegúrate de usar el user_id correcto
+        user_id,
         pasaporte,
         asiento,
         numeroVuelo,
         claseVuelo,
-        status, // Agregado el estatus
+        status,
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva', pasajero: nuevoPasajero });

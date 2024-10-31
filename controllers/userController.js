@@ -5,8 +5,8 @@ const pasajeroController = require('./pasajeroController');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 module.exports = {
-  // Crear un nuevo usuario y un pasajero relacionado
-  async createUser(req, res) {
+   // Crear un nuevo usuario y un pasajero relacionado
+   async createUser(req, res) {
     try {
       const { username, password, roleId } = req.body;
 
@@ -23,10 +23,12 @@ module.exports = {
       });
 
       // Crear el pasajero asociado al nuevo usuario
-      await pasajeroController.createPasajeroForUser(newUser.id);
-      return res.status(201).json(newUser);
+      const newPasajero = await Pasajero.create({
+        user_id: newUser.id, // Relación con el usuario creado
+      });
+
+      return res.status(201).json({ user: newUser, pasajero: newPasajero });
     } catch (error) {
-      console.error('Error en createUser:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },

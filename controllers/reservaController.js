@@ -19,7 +19,7 @@ module.exports = {
     }
   },
 
-  // Actualizar una reserva sin pasajeros
+  // Actualizar una reserva
   async updateReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
@@ -41,7 +41,7 @@ module.exports = {
     }
   },
 
-  // Obtener todas las reservas sin pasajeros
+  // Obtener todas las reservas
   async getAllReservas(req, res) {
     try {
       const reservas = await Reserva.findAll();
@@ -69,7 +69,7 @@ module.exports = {
         asiento,
         numeroVuelo,
         claseVuelo,
-        status, // Agregado el estatus
+        status,
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva', pasajero: nuevoPasajero });
@@ -115,6 +115,22 @@ module.exports = {
     }
   },
 
+  // Eliminar una reserva
+  async deleteReserva(req, res) {
+    try {
+      const { id } = req.params; // ID de la reserva
+      const reserva = await Reserva.findByPk(id);
+      if (!reserva) {
+        return res.status(404).json({ error: 'Reserva no encontrada' });
+      }
+
+      await reserva.destroy();
+      return res.status(200).json({ message: 'Reserva eliminada correctamente' });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
   // Actualizar el estatus de un pasajero
   async updatePasajeroStatus(req, res) {
     try {
@@ -130,24 +146,6 @@ module.exports = {
       await pasajero.save();
 
       return res.status(200).json({ message: 'Estatus del pasajero actualizado', pasajero });
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  },
-
-  // Eliminar una reserva sin pasajeros
-  async deleteReserva(req, res) {
-    try {
-      const { id } = req.params;
-
-      const reserva = await Reserva.findByPk(id);
-      if (!reserva) {
-        return res.status(404).json({ error: 'Reserva no encontrada' });
-      }
-
-      // Eliminar la reserva
-      await reserva.destroy();
-      return res.status(200).json({ message: 'Reserva eliminada correctamente' });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

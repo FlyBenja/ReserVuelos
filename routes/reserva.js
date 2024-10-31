@@ -199,6 +199,30 @@ router.get('/:id/pasajeros', reservaController.getPasajerosByReserva);
  */
 router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
 
+// Eliminar una reserva
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *   delete:
+ *     summary: Elimina una reserva
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     responses:
+ *       200:
+ *         description: Reserva eliminada correctamente
+ *       404:
+ *         description: Reserva no encontrada
+ *       500:
+ *         description: Error al eliminar la reserva
+ */
+router.delete('/:id', reservaController.deleteReserva);
+
 // Actualizar el estatus de un pasajero
 /**
  * @swagger
@@ -232,29 +256,5 @@ router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
  *         description: Error al actualizar el estatus
  */
 router.put('/pasajeros/:pasajeroId/status', reservaController.updatePasajeroStatus);
-
-// Eliminar una reserva
-/**
- * @swagger
- * /api/reservas/{id}:
- *   delete:
- *     summary: Elimina una reserva por ID
- *     tags: [Reservaciones]
- *     parameters:
- *       - in: path
- *         name: id
- *         schema:
- *           type: integer
- *         required: true
- *         description: ID de la reserva
- *     responses:
- *       200:
- *         description: Reserva eliminada correctamente
- *       404:
- *         description: Reserva no encontrada
- *       500:
- *         description: Error al eliminar la reserva
- */
-router.delete('/:id', reservaController.deleteReserva);
 
 module.exports = router;
