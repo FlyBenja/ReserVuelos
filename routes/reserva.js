@@ -1,3 +1,4 @@
+// routes/reserva.js
 const express = require('express');
 const router = express.Router();
 const reservaController = require('../controllers/reservaController');
@@ -89,6 +90,9 @@ router.get('/', reservaController.getAllReservas);
  *                 type: string
  *                 format: date
  *                 example: "2024-11-03"
+ *               estado:
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       200:
  *         description: Reserva actualizada exitosamente

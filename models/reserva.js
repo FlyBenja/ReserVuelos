@@ -1,3 +1,5 @@
+// models/reserva.js
+
 module.exports = (sequelize, DataTypes) => {
   const Reserva = sequelize.define('Reserva', {
     codigoReserva: {
@@ -12,6 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     fechaFinal: {
       type: DataTypes.DATE,
       allowNull: false,
+    },
+    estado: { // Estado de la reserva
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
     },
     createdAt: {
       type: DataTypes.DATE,

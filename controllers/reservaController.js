@@ -6,11 +6,11 @@ module.exports = {
   async createReserva(req, res) {
     try {
       const { codigoReserva, fechaInicio, fechaFinal } = req.body;
-
       const nuevaReserva = await Reserva.create({
         codigoReserva,
         fechaInicio,
         fechaFinal,
+        estado: true, // Confirmado por defecto
       });
       console.log("Reserva creada exitosamente.");
       return res.status(201).json(nuevaReserva);
@@ -23,7 +23,7 @@ module.exports = {
   async updateReserva(req, res) {
     try {
       const { id } = req.params;
-      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
+      const { codigoReserva, fechaInicio, fechaFinal, estado } = req.body;
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
@@ -33,6 +33,7 @@ module.exports = {
       reserva.codigoReserva = codigoReserva;
       reserva.fechaInicio = fechaInicio;
       reserva.fechaFinal = fechaFinal;
+      reserva.estado = estado;
       await reserva.save();
 
       return res.status(200).json({ message: 'Reserva actualizada', reserva });

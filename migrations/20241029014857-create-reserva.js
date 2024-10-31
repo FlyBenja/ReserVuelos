@@ -22,6 +22,11 @@ module.exports = {
         type: Sequelize.DATE,
         allowNull: false,
       },
+      estado: { // Campo para estado de la reserva (Confirmado o Cancelado)
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: true, // Confirmado por defecto
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
