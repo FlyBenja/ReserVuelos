@@ -26,7 +26,7 @@ module.exports = {
           ], {});
           console.log("Rol 'Admin' creado exitosamente.");
         } else {
-          console.warn("El rol 'Admin' ya existe en la tabla 'Roles'.");
+          console.warn("El rol 'Admin' ya existe en la tabla 'Roles', no se requiere inserción.");
         }
       } catch (error) {
         // Manejar otros posibles errores
