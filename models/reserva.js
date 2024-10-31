@@ -15,22 +15,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    estado: { // Estado de la reserva
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
-      defaultValue: true,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
-    updatedAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: DataTypes.NOW,
-    },
   });
+
+  Reserva.associate = (models) => {
+    Reserva.hasMany(models.DatosVuelo, { foreignKey: 'reserva_id', as: 'datosVuelos' });
+  };
 
   return Reserva;
 };
