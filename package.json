@@ -4,17 +4,14 @@
   "main": "index.js",
   "scripts": {
     "drop": "npm install && npx sequelize-cli db:migrate:undo:all",
-    "rollback": "npx sequelize-cli db:migrate:undo",
-    "migrate": "npx sequelize-cli db:migrate",
-    "seed": "npx sequelize-cli db:seed:all",
-    "start": "npm run migrate && npm run seed && npm run dev",
+    "start": "npx sequelize-cli db:migrate && npx sequelize-cli db:seed:all && npm run dev",
     "dev": "node app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "API para gestión de reservas de vuelos",
+  "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -31,8 +28,5 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.7"
-  },
-  "engines": {
-    "node": ">=20.0.0"
   }
 }
