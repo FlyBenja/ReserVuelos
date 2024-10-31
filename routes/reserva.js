@@ -196,4 +196,38 @@ router.get('/:id/pasajeros', reservaController.getPasajerosByReserva);
  */
 router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
 
+// Actualizar el estatus de un pasajero
+/**
+ * @swagger
+ * /api/reservas/pasajeros/{pasajeroId}/status:
+ *   put:
+ *     summary: Actualiza el estatus de un pasajero
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: pasajeroId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del pasajero
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: boolean
+ *                 example: false
+ *     responses:
+ *       200:
+ *         description: Estatus del pasajero actualizado
+ *       404:
+ *         description: Pasajero no encontrado
+ *       500:
+ *         description: Error al actualizar el estatus
+ */
+router.put('/pasajeros/:pasajeroId/status', reservaController.updatePasajeroStatus);
+
 module.exports = router;

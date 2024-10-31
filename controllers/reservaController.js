@@ -55,7 +55,7 @@ module.exports = {
   async addPasajeroToReserva(req, res) {
     try {
       const { id } = req.params; // ID de la reserva
-      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo } = req.body;
+      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo, status = true } = req.body;
 
       const reserva = await Reserva.findByPk(id);
       if (!reserva) {
@@ -69,6 +69,7 @@ module.exports = {
         asiento,
         numeroVuelo,
         claseVuelo,
+        status, // Agregado el estatus
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva', pasajero: nuevoPasajero });
@@ -109,6 +110,26 @@ module.exports = {
       }
 
       return res.status(200).json(reservas);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Actualizar el estatus de un pasajero
+  async updatePasajeroStatus(req, res) {
+    try {
+      const { pasajeroId } = req.params; // ID del pasajero
+      const { status } = req.body; // Nuevo estatus
+
+      const pasajero = await Pasajero.findByPk(pasajeroId);
+      if (!pasajero) {
+        return res.status(404).json({ error: 'Pasajero no encontrado' });
+      }
+
+      pasajero.status = status;
+      await pasajero.save();
+
+      return res.status(200).json({ message: 'Estatus del pasajero actualizado', pasajero });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

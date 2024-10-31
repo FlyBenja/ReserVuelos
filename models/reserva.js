@@ -17,12 +17,12 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW, // Agrega el valor predeterminado
+      defaultValue: DataTypes.NOW, // Valor predeterminado
     },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: DataTypes.NOW, // Agrega el valor predeterminado
+      defaultValue: DataTypes.NOW, // Valor predeterminado
     },
   });
 
