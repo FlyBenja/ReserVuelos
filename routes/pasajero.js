@@ -69,18 +69,7 @@ router.get('/:id', pasajeroController.getPasajeroById);
  *       500:
  *         description: Error al crear el pasajero
  */
-router.post('/', async (req, res) => {
-  const { user_id } = req.body;
-  if (!user_id) {
-    return res.status(400).json({ error: 'El campo user_id es obligatorio.' });
-  }
-  try {
-    const nuevoPasajero = await pasajeroController.createPasajeroForUser(user_id);
-    return res.status(201).json(nuevoPasajero);
-  } catch (error) {
-    return res.status(500).json({ error: error.message });
-  }
-});
+router.post('/', pasajeroController.createPasajeroForUser);
 
 // Eliminar un pasajero por ID
 /**

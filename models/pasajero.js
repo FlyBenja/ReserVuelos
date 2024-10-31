@@ -8,6 +8,7 @@ module.exports = (sequelize, DataTypes) => {
         key: 'id',
       },
     },
+    // ReservaId eliminado, ya que no se requiere
   });
 
   Pasajero.associate = (models) => {
