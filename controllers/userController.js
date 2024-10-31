@@ -6,45 +6,29 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
 module.exports = {
    // Crear un nuevo usuario y un pasajero relacionado
-   async createUser(req, res) {
-    try {
-      const { username, password, roleId } = req.body;
+async createUser(req, res) {
+  try {
+    const { username, password, roleId } = req.body;
 
-      const userExistente = await User.findOne({ where: { username } });
-      if (userExistente) {
-        return res.status(400).json({ error: 'Error.- Usuario ya registrado' });
-      }
-
-      const hashedPassword = await bcrypt.hash(password, 10);
-      const newUser = await User.create({
-        username,
-        password: hashedPassword,
-        roleId,
-      });
-
-      // Crear el pasajero asociado al nuevo usuario
-      const newPasajero = await Pasajero.create({
-        user_id: newUser.id, // Relación con el usuario creado
-      });
-
-      return res.status(201).json({ user: newUser, pasajero: newPasajero });
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
+    const userExistente = await User.findOne({ where: { username } });
+    if (userExistente) {
+      return res.status(400).json({ error: 'Error.- Usuario ya registrado' });
     }
-  },
 
-  // Obtener todos los usuarios
-  async getAllUsers(req, res) {
-    try {
-      const users = await User.findAll({
-        include: [{ model: Role, as: 'role' }],
-      });
-      return res.status(200).json(users);
-    } catch (error) {
-      console.error('Error en getAllUsers:', error.message); // Log para depuración
-      return res.status(500).json({ error: error.message });
-    }
-  },
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = await User.create({
+      username,
+      password: hashedPassword,
+      roleId,
+    });
+
+    // Crear el pasajero asociado al nuevo usuario
+    await pasajeroController.createPasajeroForUser(newUser.id);
+    return res.status(201).json(newUser);
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
+  }
+},
 
   // Eliminar un usuario específico
   async deleteUser(req, res) {

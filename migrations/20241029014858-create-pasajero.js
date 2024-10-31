@@ -1,4 +1,3 @@
-// migrations/XXXXXX-create-pasajeros.js
 'use strict';
 
 module.exports = {
@@ -17,15 +16,6 @@ module.exports = {
           key: 'id',
         },
         allowNull: false,
-        unique: true,
-      },
-      reservaId: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'Reservas',
-          key: 'id',
-        },
-        allowNull: true,
       },
       createdAt: {
         allowNull: false,
