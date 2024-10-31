@@ -1,3 +1,4 @@
+// models/reserva.js
 module.exports = (sequelize, DataTypes) => {
   const Reserva = sequelize.define('Reserva', {
     codigoReserva: {
@@ -15,7 +16,6 @@ module.exports = (sequelize, DataTypes) => {
     },
   });
 
-  // Definición de la asociación
   Reserva.associate = (models) => {
     Reserva.hasMany(models.Pasajero, {
       foreignKey: 'reservaId',

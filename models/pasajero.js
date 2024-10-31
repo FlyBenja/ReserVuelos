@@ -6,7 +6,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       references: {
-        model: 'User',
+        model: 'Users', // Cambia esto al nombre correcto de tu tabla de usuarios
+        key: 'id',
+      },
+    },
+    reservaId: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Reservas', // Cambia esto al nombre correcto de tu tabla de reservas
         key: 'id',
       },
     },
@@ -16,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
     Pasajero.belongsTo(models.User, {
       foreignKey: 'user_id',
       as: 'user',
+    });
+    Pasajero.belongsTo(models.Reserva, {
+      foreignKey: 'reservaId',
+      as: 'reserva',
     });
   };
 

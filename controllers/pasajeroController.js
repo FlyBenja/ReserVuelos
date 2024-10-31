@@ -3,10 +3,10 @@ const { Pasajero, User } = require('../models');
 
 module.exports = {
   // Crear un pasajero automáticamente al crear un usuario
-  async createPasajeroForUser(userId) {
+  async createPasajeroForUser(userId, reservaId) {
     try {
       // Crear el pasajero relacionado con el nuevo usuario
-      const newPasajero = await Pasajero.create({ user_id: userId });
+      const newPasajero = await Pasajero.create({ user_id: userId, reservaId });
       return newPasajero;
     } catch (error) {
       console.error('Error al crear el pasajero para el usuario:', error.message);

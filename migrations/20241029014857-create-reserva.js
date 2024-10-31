@@ -1,3 +1,4 @@
+// migrations/create-reserva.js
 'use strict';
 
 module.exports = {

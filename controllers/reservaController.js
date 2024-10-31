@@ -1,3 +1,4 @@
+// controllers/reservaController.js
 const { Reserva } = require('../models');
 
 module.exports = {
