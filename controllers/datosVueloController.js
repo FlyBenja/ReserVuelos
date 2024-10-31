@@ -1,14 +1,18 @@
 // controllers/datosVueloController.js
-const { DatosVuelo, Reserva } = require('../models');
+const { DatosVuelo, Reserva, ClaseVuelo, User } = require('../models');
 
 module.exports = {
-  // Crear un nuevo DatoVuelo solo con id_user
+  // Crear un nuevo DatoVuelo
   async createDatosVuelo(req, res) {
     try {
-      const { id_user } = req.body;
-
+      const { id_user, id_reserva, id_classvuelo, asiento, pasaporte } = req.body;
       const nuevoDatosVuelo = await DatosVuelo.create({
         id_user,
+        id_reserva,
+        id_classvuelo,
+        asiento,
+        pasaporte,
+        estado: true, // Confirmado por defecto
       });
       return res.status(201).json(nuevoDatosVuelo);
     } catch (error) {
@@ -16,39 +20,46 @@ module.exports = {
     }
   },
 
-  // Asignar una reserva a un DatoVuelo existente con detalles adicionales
-  async assignReservaToDatosVuelo(req, res) {
+  // Obtener todos los DatosVuelo por id_reserva (listado de pasajeros de una reserva)
+  async getDatosVueloByReserva(req, res) {
     try {
-      const { id } = req.params; // ID del DatoVuelo
-      const { id_reserva, id_classvuelo, pasaporte, asiento } = req.body;
-
-      const datoVuelo = await DatosVuelo.findByPk(id);
-      if (!datoVuelo) {
-        return res.status(404).json({ error: 'Dato de vuelo no encontrado' });
-      }
-
-      // Crea o asocia la reserva con el dato de vuelo
-      const reservaAsignada = await Reserva.create({
-        id_datoVuelo: id,
-        id_reserva,
-        id_classvuelo,
-        pasaporte,
-        asiento,
+      const { id_reserva } = req.params;
+      const datosVuelos = await DatosVuelo.findAll({
+        where: { id_reserva },
+        include: [
+          { model: User, as: 'usuario', attributes: ['nombre', 'apellido'] },
+          { model: ClaseVuelo, as: 'claseVuelo' },
+        ],
       });
-
-      return res.status(201).json(reservaAsignada);
+      return res.status(200).json(datosVuelos);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
   },
 
-  // Obtener todos los DatosVuelo
-  async getAllDatosVuelo(req, res) {
+  // Obtener todas las reservas de un usuario (historial de reservas de un usuario)
+  async getReservasByUser(req, res) {
     try {
+      const { id_user } = req.params;
       const datosVuelos = await DatosVuelo.findAll({
-        include: [{ model: Reserva, as: 'reservas' }],
+        where: { id_user },
+        include: [{ model: Reserva, as: 'reserva' }, { model: ClaseVuelo, as: 'claseVuelo' }],
       });
       return res.status(200).json(datosVuelos);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Obtener información de un pasajero específico
+  async getDatosVueloById(req, res) {
+    try {
+      const { id } = req.params;
+      const datosVuelo = await DatosVuelo.findByPk(id, {
+        include: [{ model: Reserva, as: 'reserva' }, { model: ClaseVuelo, as: 'claseVuelo' }],
+      });
+      if (!datosVuelo) return res.status(404).json({ error: 'Pasajero no encontrado' });
+      return res.status(200).json(datosVuelo);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -58,15 +69,16 @@ module.exports = {
   async updateDatosVuelo(req, res) {
     try {
       const { id } = req.params;
-      const { pasaporte, asiento } = req.body;
+      const { pasaporte, asiento, estado } = req.body;
 
       const datosVuelo = await DatosVuelo.findByPk(id);
       if (!datosVuelo) {
-        return res.status(404).json({ error: 'DatosVuelo no encontrado' });
+        return res.status(404).json({ error: 'Pasajero no encontrado' });
       }
 
       datosVuelo.pasaporte = pasaporte;
       datosVuelo.asiento = asiento;
+      datosVuelo.estado = estado;
       await datosVuelo.save();
 
       return res.status(200).json(datosVuelo);
@@ -82,11 +94,11 @@ module.exports = {
       const datosVuelo = await DatosVuelo.findByPk(id);
 
       if (!datosVuelo) {
-        return res.status(404).json({ error: 'DatosVuelo no encontrado' });
+        return res.status(404).json({ error: 'Pasajero no encontrado' });
       }
 
       await datosVuelo.destroy();
-      return res.status(200).json({ message: 'DatosVuelo eliminado correctamente' });
+      return res.status(200).json({ message: 'Pasajero eliminado correctamente' });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

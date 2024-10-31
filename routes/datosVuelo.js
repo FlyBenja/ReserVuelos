@@ -7,7 +7,7 @@ const datosVueloController = require('../controllers/datosVueloController');
  * @swagger
  * tags:
  *   name: DatosVuelo
- *   description: API para gestionar los datos de vuelo
+ *   description: API para gestionar los datos de vuelo y sus reservas
  */
 
 // Crear un nuevo DatoVuelo solo con id_user
@@ -30,126 +30,95 @@ const datosVueloController = require('../controllers/datosVueloController');
  *     responses:
  *       201:
  *         description: Dato de vuelo creado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_user:
- *                   type: integer
- *                   description: ID del usuario asociado
  *       500:
  *         description: Error al crear el dato de vuelo
  */
 router.post('/', datosVueloController.createDatosVuelo);
 
-// Asignar una reserva a un DatoVuelo existente
+// Obtener pasajeros por reserva específica
 /**
  * @swagger
- * /api/datos-vuelo/{id}/reserva:
- *   post:
- *     summary: Asigna una reserva a un dato de vuelo existente
+ * /api/datos-vuelo/reserva/{id_reserva}:
+ *   get:
+ *     summary: Obtiene todos los pasajeros de una reserva específica
+ *     tags: [DatosVuelo]
+ *     parameters:
+ *       - in: path
+ *         name: id_reserva
+ *         required: true
+ *         description: ID de la reserva
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de pasajeros de la reserva
+ *       404:
+ *         description: Reserva no encontrada
+ *       500:
+ *         description: Error al obtener los datos de vuelo
+ */
+router.get('/reserva/:id_reserva', datosVueloController.getDatosVueloByReserva);
+
+// Obtener todas las reservas de un usuario
+/**
+ * @swagger
+ * /api/datos-vuelo/usuario/{id_user}:
+ *   get:
+ *     summary: Obtiene todas las reservas de un usuario específico
+ *     tags: [DatosVuelo]
+ *     parameters:
+ *       - in: path
+ *         name: id_user
+ *         required: true
+ *         description: ID del usuario
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Lista de reservas del usuario
+ *       404:
+ *         description: Usuario no encontrado
+ *       500:
+ *         description: Error al obtener las reservas
+ */
+router.get('/usuario/:id_user', datosVueloController.getReservasByUser);
+
+// Obtener información de un pasajero específico
+/**
+ * @swagger
+ * /api/datos-vuelo/{id}:
+ *   get:
+ *     summary: Obtiene la información de un pasajero específico
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del dato de vuelo
+ *         description: ID del dato de vuelo (pasajero)
  *         schema:
  *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               id_reserva:
- *                 type: integer
- *                 example: 1
- *                 description: ID de la reserva asociada
- *               id_classvuelo:
- *                 type: integer
- *                 example: 2
- *                 description: ID de la clase de vuelo
- *               asiento:
- *                 type: string
- *                 example: "12A"
- *                 description: Número de asiento
- *               pasaporte:
- *                 type: string
- *                 example: "X1234567"
- *                 description: Número de pasaporte del pasajero
- *     responses:
- *       201:
- *         description: Reserva asignada exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id_reserva:
- *                   type: integer
- *                 id_classvuelo:
- *                   type: integer
- *                 asiento:
- *                   type: string
- *                 pasaporte:
- *                   type: string
- *       404:
- *         description: Dato de vuelo no encontrado
- *       500:
- *         description: Error al asignar la reserva
- */
-router.post('/:id/reserva', datosVueloController.assignReservaToDatosVuelo);
-
-// Obtener todos los DatosVuelo
-/**
- * @swagger
- * /api/datos-vuelo:
- *   get:
- *     summary: Obtiene todos los datos de vuelo
- *     tags: [DatosVuelo]
  *     responses:
  *       200:
- *         description: Lista de datos de vuelo
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id_user:
- *                     type: integer
- *                     description: ID del usuario asociado
- *                   pasaporte:
- *                     type: string
- *                   asiento:
- *                     type: string
- *                   reserva:
- *                     type: object
- *                     properties:
- *                       id:
- *                         type: integer
- *                         description: ID de la reserva asociada
+ *         description: Detalle del pasajero
+ *       404:
+ *         description: Pasajero no encontrado
  *       500:
- *         description: Error al obtener los datos de vuelo
+ *         description: Error al obtener los datos del pasajero
  */
-router.get('/', datosVueloController.getAllDatosVuelo);
+router.get('/:id', datosVueloController.getDatosVueloById);
 
 // Actualizar un DatoVuelo
 /**
  * @swagger
  * /api/datos-vuelo/{id}:
  *   put:
- *     summary: Actualiza un dato de vuelo
+ *     summary: Actualiza la información de un dato de vuelo
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del dato de vuelo
+ *         description: ID del dato de vuelo a actualizar
  *         schema:
  *           type: integer
  *     requestBody:
@@ -165,18 +134,12 @@ router.get('/', datosVueloController.getAllDatosVuelo);
  *               asiento:
  *                 type: string
  *                 example: "12A"
+ *               estado:
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       200:
  *         description: Dato de vuelo actualizado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 pasaporte:
- *                   type: string
- *                 asiento:
- *                   type: string
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:
@@ -189,26 +152,18 @@ router.put('/:id', datosVueloController.updateDatosVuelo);
  * @swagger
  * /api/datos-vuelo/{id}:
  *   delete:
- *     summary: Elimina un dato de vuelo
+ *     summary: Elimina un dato de vuelo específico
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
- *         description: ID del dato de vuelo
+ *         description: ID del dato de vuelo a eliminar
  *         schema:
  *           type: integer
  *     responses:
  *       200:
  *         description: Dato de vuelo eliminado exitosamente
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "DatosVuelo eliminado correctamente"
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:

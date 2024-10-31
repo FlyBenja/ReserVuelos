@@ -9,7 +9,7 @@ const reservaRoutes = require('./routes/reserva');
 const claseVueloRoutes = require('./routes/claseVuelo');
 const userRoutes = require('./routes/user');
 const roleRoutes = require('./routes/role');
-const datosVueloRoutes = require('./routes/datosVuelo'); // Agregar ruta de DatosVuelo
+const datosVueloRoutes = require('./routes/datosVuelo'); // Ruta de DatosVuelo
 
 const app = express();
 
@@ -30,7 +30,7 @@ app.use('/api/users', userRoutes);
 app.use('/api/roles', roleRoutes);
 app.use('/api/clases-vuelo', claseVueloRoutes);
 app.use('/api/reservas', reservaRoutes);
-app.use('/api/datos-vuelo', datosVueloRoutes); // Agregar ruta de DatosVuelo
+app.use('/api/datos-vuelo', datosVueloRoutes);
 
 const PORT = process.env.PORT || 3000;
 db.sequelize.sync().then(() => {
