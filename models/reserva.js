@@ -1,3 +1,4 @@
+// models/reserva.js
 module.exports = (sequelize, DataTypes) => {
   const Reserva = sequelize.define('Reserva', {
     codigoReserva: {
@@ -16,10 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     pasajero_id: { // Cambié esto para hacer referencia al pasajero
       type: DataTypes.INTEGER,
       references: {
-        model: 'Pasajeros', // Asegúrate de que el nombre de la tabla sea correcto
+        model: 'Pasajeros',
         key: 'id',
       },
-      allowNull: false,
+      allowNull: true, // Permitir nulos aquí
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -36,7 +37,7 @@ module.exports = (sequelize, DataTypes) => {
   Reserva.associate = (models) => {
     Reserva.belongsTo(models.Pasajero, {
       foreignKey: 'pasajero_id',
-      as: 'pasajero', // Nombre de la relación
+      as: 'pasajero',
     });
   };
 
