@@ -5,12 +5,13 @@ module.exports = {
   // Crear una nueva reserva sin pasajeros
   async createReserva(req, res) {
     try {
-      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
+      const { codigoReserva, fechaInicio, fechaFinal, pasajero_id } = req.body; // Asegúrate de recibir pasajero_id
 
       const nuevaReserva = await Reserva.create({
         codigoReserva,
         fechaInicio,
         fechaFinal,
+        pasajero_id: pasajero_id || null, // Si no se proporciona, establecer como null
       });
       console.log("Reserva creada exitosamente.");
       return res.status(201).json(nuevaReserva);
