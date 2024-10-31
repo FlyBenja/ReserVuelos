@@ -43,4 +43,30 @@ router.get('/', pasajeroController.getPasajeros);
  */
 router.get('/:id', pasajeroController.getPasajeroById);
 
+/**
+ * @swagger
+ * /api/pasajeros:
+ *   post:
+ *     summary: Crea un nuevo pasajero
+ *     tags: [Pasajeros]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               user_id:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       201:
+ *         description: Pasajero creado exitosamente
+ *       400:
+ *         description: Error.- Usuario ya registrado
+ *       500:
+ *         description: Error al crear el pasajero
+ */
+router.post('/', pasajeroController.createPasajeroForUser);
+
 module.exports = router;

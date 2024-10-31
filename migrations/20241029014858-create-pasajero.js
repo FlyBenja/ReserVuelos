@@ -13,15 +13,19 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users', // Asegúrate de que el nombre de la tabla sea correcto
+          model: 'Users',
           key: 'id',
         },
         allowNull: false,
         unique: true,
       },
-      reservaId: { // Asegúrate de que este campo sea opcional
+      reservaId: {
         type: Sequelize.INTEGER,
-        allowNull: true, // Cambiado a true para permitir nulos
+        references: {
+          model: 'Reservas',
+          key: 'id',
+        },
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,

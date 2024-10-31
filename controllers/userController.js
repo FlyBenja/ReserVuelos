@@ -1,7 +1,6 @@
 // controllers/userController.js
-const { User, Role, Pasajero, Reserva } = require('../models'); // Asegúrate de incluir Pasajero y Reserva
+const { User, Role, Pasajero } = require('../models'); 
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 const pasajeroController = require('./pasajeroController');
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
@@ -24,7 +23,7 @@ module.exports = {
       });
 
       // Crear el pasajero asociado al nuevo usuario
-      await pasajeroController.createPasajeroForUser(newUser.id);
+      await pasajeroController.createPasajeroForUser(newUser.id); // Crea el pasajero
       return res.status(201).json(newUser);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -49,8 +48,8 @@ module.exports = {
       const { id } = req.params;
 
       // Eliminar los pasajeros y reservas asociados al usuario
-      await Pasajero.destroy({ where: { userId: id } }); // Asegúrate de que 'userId' sea el nombre correcto en la tabla Pasajero
-      await Reserva.destroy({ where: { pasajeroId: id } }); // Asegúrate de que 'pasajeroId' sea el nombre correcto en la tabla Reserva
+      await Pasajero.destroy({ where: { user_id: id } });
+      await Reserva.destroy({ where: { pasajeroId: id } });
 
       const user = await User.findByPk(id);
       if (!user) {

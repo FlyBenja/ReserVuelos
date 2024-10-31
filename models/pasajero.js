@@ -6,14 +6,14 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true,
       references: {
-        model: 'Users', // Cambia esto al nombre correcto de tu tabla de usuarios
+        model: 'Users',
         key: 'id',
       },
     },
     reservaId: {
       type: DataTypes.INTEGER,
       references: {
-        model: 'Reservas', // Cambia esto al nombre correcto de tu tabla de reservas
+        model: 'Reservas',
         key: 'id',
       },
     },

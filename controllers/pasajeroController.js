@@ -1,5 +1,5 @@
 // controllers/pasajeroController.js
-const { Pasajero } = require('../models');
+const { Pasajero, Reserva } = require('../models');
 
 module.exports = {
   // Crear un pasajero asociado a un nuevo usuario
@@ -26,8 +26,8 @@ module.exports = {
       }
 
       const nuevoPasajero = await Pasajero.create({
-        reservaId: id, // Aquí se debe asignar correctamente si es necesario
-        pasajeroId,
+        reservaId: id, // Aquí se asigna la reserva
+        user_id: pasajeroId, // Asegúrate de usar el user_id correcto
         pasaporte,
         asiento,
         numeroVuelo,
@@ -36,6 +36,32 @@ module.exports = {
       });
 
       return res.status(201).json({ message: 'Pasajero agregado a la reserva', pasajero: nuevoPasajero });
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Obtener todos los pasajeros
+  async getPasajeros(req, res) {
+    try {
+      const pasajeros = await Pasajero.findAll();
+      return res.status(200).json(pasajeros);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // Obtener un pasajero por ID
+  async getPasajeroById(req, res) {
+    try {
+      const { id } = req.params;
+      const pasajero = await Pasajero.findByPk(id);
+
+      if (!pasajero) {
+        return res.status(404).json({ error: 'Pasajero no encontrado' });
+      }
+
+      return res.status(200).json(pasajero);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
