@@ -1,4 +1,3 @@
-// controllers/userController.js
 const { User, Role, Pasajero, Reserva } = require('../models');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken'); // Asegúrate de incluir esta línea
@@ -27,6 +26,7 @@ module.exports = {
       await pasajeroController.createPasajeroForUser(newUser.id);
       return res.status(201).json(newUser);
     } catch (error) {
+      console.error('Error en createUser:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },
@@ -39,6 +39,7 @@ module.exports = {
       });
       return res.status(200).json(users);
     } catch (error) {
+      console.error('Error en getAllUsers:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },
@@ -48,18 +49,20 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      // Eliminar los pasajeros y reservas asociados al usuario
-      await Pasajero.destroy({ where: { user_id: id } });
-      await Reserva.destroy({ where: { pasajeroId: id } });
-
+      // Verificar si el usuario existe antes de intentar eliminar
       const user = await User.findByPk(id);
       if (!user) {
         return res.status(404).json({ error: 'Usuario no encontrado' });
       }
 
+      // Eliminar los pasajeros y reservas asociados al usuario
+      await Pasajero.destroy({ where: { user_id: id } });
+      await Reserva.destroy({ where: { pasajeroId: id } });
+
       await user.destroy();
       return res.status(200).json({ message: 'Usuario eliminado correctamente' });
     } catch (error) {
+      console.error('Error en deleteUser:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },
@@ -82,6 +85,7 @@ module.exports = {
       const token = jwt.sign({ id: user.id, roleId: user.roleId }, JWT_SECRET, { expiresIn: '1h' });
       return res.status(200).json({ token });
     } catch (error) {
+      console.error('Error en loginUser:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },
@@ -101,6 +105,7 @@ module.exports = {
 
       return res.status(200).json(user);
     } catch (error) {
+      console.error('Error en getUserByToken:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },
@@ -131,6 +136,7 @@ module.exports = {
 
       return res.status(200).json({ message: 'Contraseña actualizada correctamente' });
     } catch (error) {
+      console.error('Error en updatePassword:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },
@@ -156,6 +162,7 @@ module.exports = {
 
       return res.status(200).json({ message: 'Nombre de usuario actualizado correctamente' });
     } catch (error) {
+      console.error('Error en updateUsername:', error.message); // Log para depuración
       return res.status(500).json({ error: error.message });
     }
   },

@@ -26,4 +26,4 @@ function authenticateToken(roles = []) {
   };
 }
 
-module.exports = authenticateToken;
+module.exports = { authenticateToken }; // Exporta la función correctamente

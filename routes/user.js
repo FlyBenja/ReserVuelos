@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');
-const { authenticateToken } = require('../Middleware/authenticateToken'); 
+const { authenticateToken } = require('../Middleware/authenticateToken');
 
 /**
  * @swagger
@@ -56,7 +56,7 @@ router.post('/', userController.createUser);
  *       500:
  *         description: Error al obtener los usuarios
  */
-router.get('/', userController.getAllUsers);
+router.get('/', authenticateToken([1]), userController.getAllUsers); // Protegido para rol Admin
 
 // Eliminar un usuario
 /**
@@ -80,7 +80,7 @@ router.get('/', userController.getAllUsers);
  *       500:
  *         description: Error al eliminar el usuario
  */
-router.delete('/:id', userController.deleteUser);
+router.delete('/:id', authenticateToken([1]), userController.deleteUser); // Protegido para rol Admin
 
 // Login de usuario
 /**
