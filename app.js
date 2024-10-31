@@ -6,7 +6,6 @@ const cors = require("cors");
 const db = require('./models');
 const reservaRoutes = require('./routes/reserva');
 const claseVueloRoutes = require('./routes/claseVuelo');
-const pasajeroRoutes = require('./routes/pasajero');
 const userRoutes = require('./routes/user');
 const roleRoutes = require('./routes/role');
 const { authenticateToken } = require('./Middleware/authenticateToken');
@@ -32,7 +31,6 @@ app.use('/api/users', userRoutes); // Rutas públicas para creación y login de 
 app.use('/api/roles', authenticateToken([1]), roleRoutes); // Accesible solo para roleId = 1 (Admin)
 app.use('/api/clases-vuelo', authenticateToken([1]), claseVueloRoutes); // Accesible solo para roleId = 1
 app.use('/api/reservas', authenticateToken([1, 2]), reservaRoutes); // Accesible para roleId = 1 y roleId = 2
-app.use('/api/pasajeros', authenticateToken([1, 2]), pasajeroRoutes); // Accesible para roleId = 1 y roleId = 2
 
 const PORT = process.env.PORT || 3000;
 db.sequelize.sync().then(() => {
