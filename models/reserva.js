@@ -1,3 +1,4 @@
+// models/reserva.js
 module.exports = (sequelize, DataTypes) => {
   const Reserva = sequelize.define('Reserva', {
     codigoReserva: {

@@ -1,3 +1,4 @@
+// migrations/20231030-create-reservas.js
 'use strict';
 
 module.exports = {
@@ -24,6 +25,7 @@ module.exports = {
       },
     });
   },
+
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Reservas');
   },

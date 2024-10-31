@@ -1,13 +1,16 @@
+// controllers/reservaController.js
 const { Reserva, Pasajero } = require('../models');
 
 module.exports = {
   // Crear una nueva reserva sin pasajeros
   async createReserva(req, res) {
     try {
+      const { codigoReserva, fechaInicio, fechaFinal } = req.body;
+
       const nuevaReserva = await Reserva.create({
-        codigoReserva: "RSV12345",
-        fechaInicio: "2024-10-28",
-        fechaFinal: "2024-11-02"
+        codigoReserva,
+        fechaInicio,
+        fechaFinal,
       });
       console.log("Reserva creada exitosamente.");
       return res.status(201).json(nuevaReserva);
@@ -41,9 +44,7 @@ module.exports = {
   // Obtener todas las reservas sin pasajeros
   async getAllReservas(req, res) {
     try {
-      const reservas = await Reserva.findAll({
-        include: [{ model: Pasajero, as: 'pasajeros' }],
-      });
+      const reservas = await Reserva.findAll();
       return res.status(200).json(reservas);
     } catch (error) {
       return res.status(500).json({ error: error.message });
@@ -63,6 +64,7 @@ module.exports = {
 
       const nuevoPasajero = await Pasajero.create({
         reservaId: id,
+        pasajeroId,
         pasaporte,
         asiento,
         numeroVuelo,
