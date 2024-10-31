@@ -1,4 +1,3 @@
-// routes/reserva.js
 const express = require('express');
 const router = express.Router();
 const reservaController = require('../controllers/reservaController');
@@ -44,5 +43,156 @@ const reservaController = require('../controllers/reservaController');
  *         description: Error al crear la reserva
  */
 router.post('/', reservaController.createReserva);
+
+// Actualizar una reserva
+/**
+ * @swagger
+ * /api/reservas/{id}:
+ *   put:
+ *     summary: Actualiza una reserva sin pasajeros
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               codigoReserva:
+ *                 type: string
+ *                 example: "RSV54321"
+ *               fechaInicio:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-10-29"
+ *               fechaFinal:
+ *                 type: string
+ *                 format: date
+ *                 example: "2024-11-03"
+ *     responses:
+ *       200:
+ *         description: Reserva actualizada exitosamente
+ *       404:
+ *         description: Reserva no encontrada
+ *       500:
+ *         description: Error al actualizar la reserva
+ */
+router.put('/:id', reservaController.updateReserva);
+
+// Obtener todas las reservas
+/**
+ * @swagger
+ * /api/reservas:
+ *   get:
+ *     summary: Obtiene todas las reservas sin pasajeros
+ *     tags: [Reservaciones]
+ *     responses:
+ *       200:
+ *         description: Lista de reservas
+ *       500:
+ *         description: Error al obtener reservas
+ */
+router.get('/', reservaController.getAllReservas);
+
+// Agregar un pasajero a una reserva
+/**
+ * @swagger
+ * /api/reservas/{id}/pasajero:
+ *   post:
+ *     summary: Agrega un pasajero a una reserva existente
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               pasajeroId:
+ *                 type: integer
+ *                 example: 1
+ *               pasaporte:
+ *                 type: string
+ *                 example: "A1234567"
+ *               asiento:
+ *                 type: string
+ *                 example: "12A"
+ *               numeroVuelo:
+ *                 type: string
+ *                 example: "AB123"
+ *               claseVuelo:
+ *                 type: string
+ *                 example: "Primera Clase"
+ *     responses:
+ *       201:
+ *         description: Pasajero agregado a la reserva
+ *       404:
+ *         description: Reserva no encontrada
+ *       500:
+ *         description: Error al agregar pasajero
+ */
+router.post('/:id/pasajero', reservaController.addPasajeroToReserva);
+
+// Obtener todos los pasajeros de una reserva
+/**
+ * @swagger
+ * /api/reservas/{id}/pasajeros:
+ *   get:
+ *     summary: Obtiene todos los pasajeros de una reserva
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID de la reserva
+ *     responses:
+ *       200:
+ *         description: Lista de pasajeros
+ *       404:
+ *         description: Reserva no encontrada
+ *       500:
+ *         description: Error al obtener pasajeros
+ */
+router.get('/:id/pasajeros', reservaController.getPasajerosByReserva);
+
+// Obtener todas las reservas de un pasajero específico
+/**
+ * @swagger
+ * /api/reservas/pasajero/{pasajeroId}:
+ *   get:
+ *     summary: Obtiene todas las reservas de un pasajero
+ *     tags: [Reservaciones]
+ *     parameters:
+ *       - in: path
+ *         name: pasajeroId
+ *         schema:
+ *           type: integer
+ *         required: true
+ *         description: ID del pasajero
+ *     responses:
+ *       200:
+ *         description: Lista de reservas del pasajero
+ *       404:
+ *         description: No se encontraron reservas para el pasajero
+ *       500:
+ *         description: Error al obtener reservas
+ */
+router.get('/pasajero/:pasajeroId', reservaController.getReservasByPasajeroId);
 
 module.exports = router;
