@@ -138,6 +138,9 @@ router.get('/', reservaController.getAllReservas);
  *               claseVuelo:
  *                 type: string
  *                 example: "Primera Clase"
+ *               status:  // Agregado el campo de estado
+ *                 type: boolean
+ *                 example: true
  *     responses:
  *       201:
  *         description: Pasajero agregado a la reserva
