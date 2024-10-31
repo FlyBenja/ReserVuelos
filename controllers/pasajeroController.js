@@ -1,12 +1,12 @@
 // controllers/pasajeroController.js
-const { Pasajero, User } = require('../models');
+const { Pasajero } = require('../models');
 
 module.exports = {
-  // Crear un pasajero automáticamente al crear un usuario
-  async createPasajeroForUser(userId, reservaId) {
+  // Crear un pasajero asociado a un nuevo usuario
+  async createPasajeroForUser(userId) {
     try {
-      // Crear el pasajero relacionado con el nuevo usuario
-      const newPasajero = await Pasajero.create({ user_id: userId, reservaId });
+      // Crear el pasajero sin necesidad de asignar un reservaId
+      const newPasajero = await Pasajero.create({ user_id: userId });
       return newPasajero;
     } catch (error) {
       console.error('Error al crear el pasajero para el usuario:', error.message);
@@ -14,27 +14,28 @@ module.exports = {
     }
   },
 
-  // Obtener todos los pasajeros
-  async getPasajeros(req, res) {
+  // Agregar un pasajero a una reserva existente
+  async addPasajeroToReserva(req, res) {
     try {
-      const pasajeros = await Pasajero.findAll();
-      return res.status(200).json(pasajeros);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  },
+      const { id } = req.params; // ID de la reserva
+      const { pasajeroId, pasaporte, asiento, numeroVuelo, claseVuelo, status = true } = req.body;
 
-  // Obtener un pasajero por ID
-  async getPasajeroById(req, res) {
-    try {
-      const { id } = req.params;
-      const pasajero = await Pasajero.findByPk(id);
-
-      if (!pasajero) {
-        return res.status(404).json({ error: 'Pasajero no encontrado' });
+      const reserva = await Reserva.findByPk(id);
+      if (!reserva) {
+        return res.status(404).json({ error: 'Reserva no encontrada' });
       }
 
-      return res.status(200).json(pasajero);
+      const nuevoPasajero = await Pasajero.create({
+        reservaId: id, // Aquí se debe asignar correctamente si es necesario
+        pasajeroId,
+        pasaporte,
+        asiento,
+        numeroVuelo,
+        claseVuelo,
+        status, // Agregado el estatus
+      });
+
+      return res.status(201).json({ message: 'Pasajero agregado a la reserva', pasajero: nuevoPasajero });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }

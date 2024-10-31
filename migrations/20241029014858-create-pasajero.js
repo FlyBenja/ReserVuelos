@@ -1,8 +1,8 @@
-// migrations/create-pasajero.js
+// migrations/XXXXXX-create-pasajeros.js
 'use strict';
 
 module.exports = {
-  async up(queryInterface, Sequelize) {
+  up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('Pasajeros', {
       id: {
         allowNull: false,
@@ -13,32 +13,30 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'Users', // Nombre de la tabla Users
+          model: 'Users', // Asegúrate de que el nombre de la tabla sea correcto
           key: 'id',
         },
         allowNull: false,
         unique: true,
       },
-      reservaId: {
+      reservaId: { // Asegúrate de que este campo sea opcional
         type: Sequelize.INTEGER,
-        references: {
-          model: 'Reservas', // Nombre de la tabla Reservas
-          key: 'id',
-        },
-        allowNull: false,
+        allowNull: true, // Cambiado a true para permitir nulos
       },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
     });
   },
 
-  async down(queryInterface, Sequelize) {
+  down: async (queryInterface, Sequelize) => {
     await queryInterface.dropTable('Pasajeros');
   },
 };
