@@ -13,13 +13,13 @@ module.exports = (sequelize, DataTypes) => {
   Pasajero.associate = (models) => {
     Pasajero.belongsTo(models.User, {
       foreignKey: 'user_id',
-      as: 'usuario', // Cambia el alias para evitar confusiones
+      as: 'user',
     });
 
-    // Si necesitas que un pasajero tenga muchas reservas:
-    Pasajero.hasMany(models.Reserva, {
-      foreignKey: 'pasajero_id', // Asegúrate de que el nombre del campo coincida
-      as: 'reservas', // Alias para las reservas
+    // Esta relación es para conectar con la Reserva
+    Pasajero.hasMany(models.Reserva, { // Un pasajero puede tener múltiples reservas
+      foreignKey: 'pasajero_id', // La columna en la tabla 'Reservas' que hará referencia a 'Pasajeros'
+      as: 'reservas', // Nombre de la relación
     });
   };
 

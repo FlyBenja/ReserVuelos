@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
   Reserva.associate = (models) => {
     Reserva.belongsTo(models.Pasajero, {
       foreignKey: 'pasajero_id',
-      as: 'pasajero',
+      as: 'pasajero', // Nombre de la relación
     });
   };
 
