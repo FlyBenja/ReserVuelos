@@ -27,8 +27,4 @@ module.exports = {
       console.log("El usuario 'admin' ya existe en la tabla 'Users'. No se necesita crear uno nuevo.");
     }
   },
-
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.bulkDelete('Users', { username: 'admin' });
-  }
 };
