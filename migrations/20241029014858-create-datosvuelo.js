@@ -15,7 +15,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Users', // Asegúrate de que el nombre de la tabla de usuarios sea 'Users'
+          model: 'Users', // Nombre de la tabla de usuarios
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -65,6 +65,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('DatosVuelos'); // Elimina la tabla 'DatosVuelos' al revertir
+    await queryInterface.dropTable('DatosVuelos'); // Primero se elimina 'DatosVuelos'
   },
 };
