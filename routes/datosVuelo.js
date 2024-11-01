@@ -11,7 +11,7 @@ const datosVueloController = require('../controllers/datosVueloController');
  *   description: API para gestionar los datos de vuelo
  */
 
-// POST: Crear un nuevo DatoVuelo con todos los campos necesarios
+// POST: Crear un nuevo DatoVuelo con todos los campos necesarios, incluyendo numeroVuelo
 /**
  * @swagger
  * /api/datos-vuelo:
@@ -40,6 +40,9 @@ const datosVueloController = require('../controllers/datosVueloController');
  *               asiento:
  *                 type: string
  *                 example: "12A"
+ *               numeroVuelo:
+ *                 type: string
+ *                 example: "UX1234"
  *               status:
  *                 type: boolean
  *                 example: true
@@ -95,12 +98,12 @@ router.get('/usuario/:user_id', datosVueloController.getReservasByUser);
  */
 router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
 
-// UPDATE: Actualizar un DatoVuelo usando id (llave primaria)
+// UPDATE: Actualizar solo el estatus de un DatoVuelo usando id (llave primaria)
 /**
  * @swagger
  * /api/datos-vuelo/{id}:
  *   put:
- *     summary: Actualiza un dato de vuelo utilizando el id (llave primaria)
+ *     summary: Actualiza solo el estatus de un dato de vuelo utilizando el id (llave primaria)
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
@@ -116,21 +119,12 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  *           schema:
  *             type: object
  *             properties:
- *               clasevuelo_id:
- *                 type: integer
- *                 example: 2
- *               pasaporte:
- *                 type: string
- *                 example: "X1234567"
- *               asiento:
- *                 type: string
- *                 example: "12A"
  *               status:
  *                 type: boolean
  *                 example: true
  *     responses:
  *       200:
- *         description: Dato de vuelo actualizado exitosamente
+ *         description: Status actualizado exitosamente
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:

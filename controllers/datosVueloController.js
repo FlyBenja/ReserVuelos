@@ -3,10 +3,10 @@
 const { DatosVuelo } = require('../models');
 
 module.exports = {
-  // POST: Crear un nuevo DatoVuelo con todos los campos necesarios, incluyendo user_id
+  // POST: Crear un nuevo DatoVuelo con todos los campos necesarios, incluyendo numeroVuelo
   async createDatosVuelo(req, res) {
     try {
-      const { user_id, reserva_id, clasevuelo_id, pasaporte, asiento, status } = req.body;
+      const { user_id, reserva_id, clasevuelo_id, pasaporte, asiento, numeroVuelo, status } = req.body;
 
       const nuevoDatosVuelo = await DatosVuelo.create({
         user_id,
@@ -14,6 +14,7 @@ module.exports = {
         clasevuelo_id,
         pasaporte,
         asiento,
+        numeroVuelo,
         status,
       });
       return res.status(201).json(nuevoDatosVuelo);
@@ -48,24 +49,22 @@ module.exports = {
     }
   },
 
-  // UPDATE: Actualizar un DatoVuelo utilizando id (llave primaria)
+  // UPDATE: Actualizar el estatus de un DatoVuelo utilizando id (llave primaria)
   async updateDatosVuelo(req, res) {
     try {
       const { id } = req.params;
-      const { clasevuelo_id, pasaporte, asiento, status } = req.body;
+      const { status } = req.body;
 
       const datosVuelo = await DatosVuelo.findByPk(id);
       if (!datosVuelo) {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }
 
-      datosVuelo.clasevuelo_id = clasevuelo_id;
-      datosVuelo.pasaporte = pasaporte;
-      datosVuelo.asiento = asiento;
+      // Solo permite cambiar el campo 'status'
       datosVuelo.status = status;
       await datosVuelo.save();
 
-      return res.status(200).json({ message: 'DatosVuelo actualizado con éxito', datosVuelo });
+      return res.status(200).json({ message: 'Status actualizado con éxito', datosVuelo });
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
