@@ -11,7 +11,7 @@ const datosVueloController = require('../controllers/datosVueloController');
  *   description: API para gestionar los datos de vuelo
  */
 
-// POST: Crear un nuevo DatoVuelo con todos los campos necesarios, incluyendo numeroVuelo
+// POST: Crear un nuevo DatoVuelo con todos los campos necesarios
 /**
  * @swagger
  * /api/datos-vuelo:
@@ -40,9 +40,9 @@ const datosVueloController = require('../controllers/datosVueloController');
  *               asiento:
  *                 type: string
  *                 example: "12A"
- *               numeroVuelo:
+ *               numero_vuelo:
  *                 type: string
- *                 example: "UX1234"
+ *                 example: "AB1234"
  *               status:
  *                 type: boolean
  *                 example: true
@@ -98,12 +98,36 @@ router.get('/usuario/:user_id', datosVueloController.getReservasByUser);
  */
 router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
 
-// UPDATE: Actualizar solo el estatus de un DatoVuelo usando id (llave primaria)
+// GET: Obtener toda la información de un DatoVuelo utilizando el id (llave primaria)
+/**
+ * @swagger
+ * /api/datos-vuelo/{id}:
+ *   get:
+ *     summary: Obtiene toda la información de un dato de vuelo por ID
+ *     tags: [DatosVuelo]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID del dato de vuelo
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Información completa del dato de vuelo
+ *       404:
+ *         description: Dato de vuelo no encontrado
+ *       500:
+ *         description: Error al obtener la información del dato de vuelo
+ */
+router.get('/:id', datosVueloController.getDatosVueloById);
+
+// UPDATE: Actualizar solo el campo "status" de un DatoVuelo usando id
 /**
  * @swagger
  * /api/datos-vuelo/{id}:
  *   put:
- *     summary: Actualiza solo el estatus de un dato de vuelo utilizando el id (llave primaria)
+ *     summary: Actualiza solo el campo "status" de un dato de vuelo utilizando el id
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
@@ -128,7 +152,7 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:
- *         description: Error al actualizar el dato de vuelo
+ *         description: Error al actualizar el status
  */
 router.put('/:id', datosVueloController.updateDatosVuelo);
 
@@ -137,7 +161,7 @@ router.put('/:id', datosVueloController.updateDatosVuelo);
  * @swagger
  * /api/datos-vuelo/{id}:
  *   delete:
- *     summary: Elimina un dato de vuelo utilizando el id (llave primaria)
+ *     summary: Elimina un dato de vuelo utilizando el id
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path

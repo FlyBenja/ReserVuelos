@@ -3,10 +3,10 @@
 const { DatosVuelo } = require('../models');
 
 module.exports = {
-  // POST: Crear un nuevo DatoVuelo con todos los campos necesarios, incluyendo numeroVuelo
+  // POST: Crear un nuevo DatoVuelo con todos los campos necesarios
   async createDatosVuelo(req, res) {
     try {
-      const { user_id, reserva_id, clasevuelo_id, pasaporte, asiento, numeroVuelo, status } = req.body;
+      const { user_id, reserva_id, clasevuelo_id, pasaporte, asiento, numero_vuelo, status } = req.body;
 
       const nuevoDatosVuelo = await DatosVuelo.create({
         user_id,
@@ -14,7 +14,7 @@ module.exports = {
         clasevuelo_id,
         pasaporte,
         asiento,
-        numeroVuelo,
+        numero_vuelo, // Nuevo campo "numero_vuelo"
         status,
       });
       return res.status(201).json(nuevoDatosVuelo);
@@ -49,7 +49,23 @@ module.exports = {
     }
   },
 
-  // UPDATE: Actualizar el estatus de un DatoVuelo utilizando id (llave primaria)
+  // GET: Obtener toda la información de un DatoVuelo utilizando el id
+  async getDatosVueloById(req, res) {
+    try {
+      const { id } = req.params;
+
+      const datosVuelo = await DatosVuelo.findByPk(id);
+      if (!datosVuelo) {
+        return res.status(404).json({ error: 'DatosVuelo no encontrado' });
+      }
+
+      return res.status(200).json(datosVuelo);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // UPDATE: Actualizar solo el campo "status" de un DatoVuelo usando id
   async updateDatosVuelo(req, res) {
     try {
       const { id } = req.params;
@@ -60,8 +76,7 @@ module.exports = {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }
 
-      // Solo permite cambiar el campo 'status'
-      datosVuelo.status = status;
+      datosVuelo.status = status; // Actualizar solo el campo "status"
       await datosVuelo.save();
 
       return res.status(200).json({ message: 'Status actualizado con éxito', datosVuelo });
@@ -70,7 +85,7 @@ module.exports = {
     }
   },
 
-  // DELETE: Eliminar un DatoVuelo utilizando id (llave primaria)
+  // DELETE: Eliminar un DatoVuelo usando id (llave primaria)
   async deleteDatosVuelo(req, res) {
     try {
       const { id } = req.params;
