@@ -22,9 +22,9 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    numero_vuelo: {
+    numero_vuelo: { // Nuevo campo "numero_vuelo"
       type: DataTypes.STRING,
-      allowNull: true, // Permitir nulo si es necesario
+      allowNull: true,
     },
     status: {
       type: DataTypes.BOOLEAN,

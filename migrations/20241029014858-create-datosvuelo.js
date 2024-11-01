@@ -22,33 +22,33 @@ module.exports = {
       },
       reserva_id: {
         type: Sequelize.INTEGER,
-        allowNull: true, // Permitimos que sea nulo en la primera inserción
+        allowNull: true,
         references: {
-          model: 'Reservas', // Nombre de la tabla de reservas
+          model: 'Reservas',
           key: 'id',
         },
         onDelete: 'CASCADE',
       },
       clasevuelo_id: {
         type: Sequelize.INTEGER,
-        allowNull: true, // Permitimos que sea nulo en la primera inserción
+        allowNull: true,
         references: {
-          model: 'ClaseVuelos', // Nombre de la tabla de clases de vuelo
+          model: 'ClaseVuelos',
           key: 'id',
         },
         onDelete: 'CASCADE',
       },
       pasaporte: {
         type: Sequelize.STRING,
-        allowNull: true, // Permitimos que sea nulo en la primera inserción
+        allowNull: true,
       },
       asiento: {
         type: Sequelize.STRING,
-        allowNull: true, // Permitimos que sea nulo en la primera inserción
+        allowNull: true,
       },
-      numero_vuelo: {
+      numero_vuelo: { // Nuevo campo "numero_vuelo"
         type: Sequelize.STRING,
-        allowNull: true, // Permitimos que sea nulo en la primera inserción
+        allowNull: true,
       },
       status: {
         type: Sequelize.BOOLEAN,

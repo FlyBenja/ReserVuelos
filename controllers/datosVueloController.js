@@ -14,28 +14,10 @@ module.exports = {
         clasevuelo_id,
         pasaporte,
         asiento,
-        numero_vuelo, // Guardar "numero_vuelo" en la base de datos
+        numero_vuelo, // Nuevo campo "numero_vuelo"
         status,
       });
       return res.status(201).json(nuevoDatosVuelo);
-    } catch (error) {
-      return res.status(500).json({ error: error.message });
-    }
-  },
-
-  // GET: Obtener toda la información de un DatoVuelo incluyendo "numero_vuelo" utilizando el id
-  async getDatosVueloById(req, res) {
-    try {
-      const { id } = req.params;
-
-      const datosVuelo = await DatosVuelo.findByPk(id, {
-        attributes: ['id', 'user_id', 'reserva_id', 'clasevuelo_id', 'pasaporte', 'asiento', 'numero_vuelo', 'status'],
-      });
-      if (!datosVuelo) {
-        return res.status(404).json({ error: 'DatosVuelo no encontrado' });
-      }
-
-      return res.status(200).json(datosVuelo);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
@@ -64,6 +46,24 @@ module.exports = {
         attributes: ['id', 'user_id', 'reserva_id', 'clasevuelo_id', 'pasaporte', 'asiento', 'numero_vuelo', 'status'],
       });
       return res.status(200).json(datosVuelos);
+    } catch (error) {
+      return res.status(500).json({ error: error.message });
+    }
+  },
+
+  // GET: Obtener toda la información de un DatoVuelo utilizando el id (incluye "numero_vuelo")
+  async getDatosVueloById(req, res) {
+    try {
+      const { id } = req.params;
+
+      const datosVuelo = await DatosVuelo.findByPk(id, {
+        attributes: ['id', 'user_id', 'reserva_id', 'clasevuelo_id', 'pasaporte', 'asiento', 'numero_vuelo', 'status'],
+      });
+      if (!datosVuelo) {
+        return res.status(404).json({ error: 'DatosVuelo no encontrado' });
+      }
+
+      return res.status(200).json(datosVuelo);
     } catch (error) {
       return res.status(500).json({ error: error.message });
     }
