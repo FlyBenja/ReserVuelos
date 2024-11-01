@@ -3,7 +3,7 @@
 const { DatosVuelo } = require('../models');
 
 module.exports = {
-  // POST: Crear un nuevo DatoVuelo con todos los campos necesarios, incluyendo numero_vuelo
+  // POST: Crear un nuevo DatoVuelo con todos los campos necesarios
   async createDatosVuelo(req, res) {
     try {
       const { user_id, reserva_id, clasevuelo_id, pasaporte, asiento, numero_vuelo, status } = req.body;
@@ -29,7 +29,6 @@ module.exports = {
       const { user_id } = req.params;
       const datosVuelos = await DatosVuelo.findAll({
         where: { user_id },
-        attributes: ['user_id', 'reserva_id', 'clasevuelo_id', 'pasaporte', 'asiento', 'numero_vuelo', 'status'],
       });
       return res.status(200).json(datosVuelos);
     } catch (error) {
@@ -43,7 +42,6 @@ module.exports = {
       const { reserva_id } = req.params;
       const datosVuelos = await DatosVuelo.findAll({
         where: { reserva_id },
-        attributes: ['user_id', 'reserva_id', 'clasevuelo_id', 'pasaporte', 'asiento', 'numero_vuelo', 'status'],
       });
       return res.status(200).json(datosVuelos);
     } catch (error) {
@@ -56,9 +54,7 @@ module.exports = {
     try {
       const { id } = req.params;
 
-      const datosVuelo = await DatosVuelo.findByPk(id, {
-        attributes: ['user_id', 'reserva_id', 'clasevuelo_id', 'pasaporte', 'asiento', 'numero_vuelo', 'status'],
-      });
+      const datosVuelo = await DatosVuelo.findByPk(id);
       if (!datosVuelo) {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }
@@ -69,7 +65,7 @@ module.exports = {
     }
   },
 
-  // UPDATE: Actualizar solo el campo "status" de un DatoVuelo utilizando id
+  // UPDATE: Actualizar solo el campo "status" de un DatoVuelo usando id
   async updateDatosVuelo(req, res) {
     try {
       const { id } = req.params;
@@ -89,7 +85,7 @@ module.exports = {
     }
   },
 
-  // DELETE: Eliminar un DatoVuelo utilizando id (llave primaria)
+  // DELETE: Eliminar un DatoVuelo usando id (llave primaria)
   async deleteDatosVuelo(req, res) {
     try {
       const { id } = req.params;

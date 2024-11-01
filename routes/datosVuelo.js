@@ -70,7 +70,7 @@ router.post('/', datosVueloController.createDatosVuelo);
  *           type: integer
  *     responses:
  *       200:
- *         description: Lista de datos de vuelo del usuario, incluyendo numero_vuelo
+ *         description: Lista de datos de vuelo del usuario
  *       500:
  *         description: Error al obtener los datos de vuelo
  */
@@ -92,7 +92,7 @@ router.get('/usuario/:user_id', datosVueloController.getReservasByUser);
  *           type: integer
  *     responses:
  *       200:
- *         description: Lista de datos de vuelo de la reserva, incluyendo numero_vuelo
+ *         description: Lista de datos de vuelo de la reserva
  *       500:
  *         description: Error al obtener los datos de vuelo
  */
@@ -103,7 +103,7 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  * @swagger
  * /api/datos-vuelo/{id}:
  *   get:
- *     summary: Obtiene toda la información de un dato de vuelo por ID, incluyendo numero_vuelo
+ *     summary: Obtiene toda la información de un dato de vuelo por ID
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
@@ -114,7 +114,7 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  *           type: integer
  *     responses:
  *       200:
- *         description: Información completa del dato de vuelo, incluyendo numero_vuelo
+ *         description: Información completa del dato de vuelo
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:
@@ -152,7 +152,7 @@ router.get('/:id', datosVueloController.getDatosVueloById);
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:
- *         description: Error al actualizar el dato de vuelo
+ *         description: Error al actualizar el status
  */
 router.put('/:id', datosVueloController.updateDatosVuelo);
 
@@ -161,7 +161,7 @@ router.put('/:id', datosVueloController.updateDatosVuelo);
  * @swagger
  * /api/datos-vuelo/{id}:
  *   delete:
- *     summary: Elimina un dato de vuelo utilizando el id (llave primaria)
+ *     summary: Elimina un dato de vuelo utilizando el id
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
