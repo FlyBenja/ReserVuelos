@@ -49,12 +49,14 @@ module.exports = {
     }
   },
 
-  // GET: Obtener toda la información de un DatoVuelo utilizando el id
+  // GET: Obtener toda la información de un DatoVuelo incluyendo "numero_vuelo" utilizando el id
   async getDatosVueloById(req, res) {
     try {
       const { id } = req.params;
 
-      const datosVuelo = await DatosVuelo.findByPk(id);
+      const datosVuelo = await DatosVuelo.findByPk(id, {
+        attributes: ['id', 'user_id', 'reserva_id', 'clasevuelo_id', 'pasaporte', 'asiento', 'numero_vuelo', 'status'],
+      });
       if (!datosVuelo) {
         return res.status(404).json({ error: 'DatosVuelo no encontrado' });
       }

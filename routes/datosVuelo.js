@@ -103,7 +103,7 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  * @swagger
  * /api/datos-vuelo/{id}:
  *   get:
- *     summary: Obtiene toda la información de un dato de vuelo por ID
+ *     summary: Obtiene toda la información de un dato de vuelo por ID, incluyendo numero_vuelo
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
@@ -114,7 +114,7 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  *           type: integer
  *     responses:
  *       200:
- *         description: Información completa del dato de vuelo
+ *         description: Información completa del dato de vuelo, incluyendo numero_vuelo
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:
