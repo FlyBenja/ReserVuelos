@@ -46,6 +46,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true, // Permitimos que sea nulo en la primera inserción
       },
+      numero_vuelo: {
+        type: Sequelize.STRING,
+        allowNull: true, // Permitimos que sea nulo en la primera inserción
+      },
       status: {
         type: Sequelize.BOOLEAN,
         defaultValue: true,
