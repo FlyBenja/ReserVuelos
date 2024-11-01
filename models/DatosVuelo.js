@@ -6,21 +6,25 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    pasaporte: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    asiento: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     reserva_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
     },
     clasevuelo_id: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
+    },
+    pasaporte: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    asiento: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    numero_vuelo: {
+      type: DataTypes.STRING,
+      allowNull: true, // Permitir nulo si es necesario
     },
     status: {
       type: DataTypes.BOOLEAN,
