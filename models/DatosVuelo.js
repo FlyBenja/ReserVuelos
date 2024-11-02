@@ -22,8 +22,12 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING,
       allowNull: true,
     },
-    numero_vuelo: { // Nuevo campo "numero_vuelo"
+    numero_vuelo: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    observaciones: { // Nuevo campo "observaciones"
+      type: DataTypes.TEXT,
       allowNull: true,
     },
     status: {

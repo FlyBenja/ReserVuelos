@@ -43,6 +43,9 @@ const datosVueloController = require('../controllers/datosVueloController');
  *               numero_vuelo:
  *                 type: string
  *                 example: "AB1234"
+ *               observaciones:
+ *                 type: string
+ *                 example: "Observaciones adicionales sobre el vuelo"
  *               status:
  *                 type: boolean
  *                 example: true
@@ -71,6 +74,31 @@ router.post('/', datosVueloController.createDatosVuelo);
  *     responses:
  *       200:
  *         description: Lista de datos de vuelo del usuario
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   user_id:
+ *                     type: integer
+ *                   reserva_id:
+ *                     type: integer
+ *                   clasevuelo_id:
+ *                     type: integer
+ *                   pasaporte:
+ *                     type: string
+ *                   asiento:
+ *                     type: string
+ *                   numero_vuelo:
+ *                     type: string
+ *                   observaciones:
+ *                     type: string
+ *                   status:
+ *                     type: boolean
  *       500:
  *         description: Error al obtener los datos de vuelo
  */
@@ -93,12 +121,37 @@ router.get('/usuario/:user_id', datosVueloController.getReservasByUser);
  *     responses:
  *       200:
  *         description: Lista de datos de vuelo de la reserva
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                   user_id:
+ *                     type: integer
+ *                   reserva_id:
+ *                     type: integer
+ *                   clasevuelo_id:
+ *                     type: integer
+ *                   pasaporte:
+ *                     type: string
+ *                   asiento:
+ *                     type: string
+ *                   numero_vuelo:
+ *                     type: string
+ *                   observaciones:
+ *                     type: string
+ *                   status:
+ *                     type: boolean
  *       500:
  *         description: Error al obtener los datos de vuelo
  */
 router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
 
-// GET: Obtener toda la información de un DatoVuelo utilizando el id (llave primaria)
+// GET: Obtener toda la información de un DatoVuelo utilizando el id
 /**
  * @swagger
  * /api/datos-vuelo/{id}:
@@ -115,6 +168,29 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  *     responses:
  *       200:
  *         description: Información completa del dato de vuelo
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 user_id:
+ *                   type: integer
+ *                 reserva_id:
+ *                   type: integer
+ *                 clasevuelo_id:
+ *                   type: integer
+ *                 pasaporte:
+ *                   type: string
+ *                 asiento:
+ *                   type: string
+ *                 numero_vuelo:
+ *                   type: string
+ *                 observaciones:
+ *                   type: string
+ *                 status:
+ *                   type: boolean
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:
@@ -122,12 +198,12 @@ router.get('/reserva/:reserva_id', datosVueloController.getUsersByReserva);
  */
 router.get('/:id', datosVueloController.getDatosVueloById);
 
-// UPDATE: Actualizar solo el campo "status" de un DatoVuelo usando id
+// UPDATE: Actualizar los campos "status" y "observaciones" de un DatoVuelo usando id
 /**
  * @swagger
  * /api/datos-vuelo/{id}:
  *   put:
- *     summary: Actualiza solo el campo "status" de un dato de vuelo utilizando el id
+ *     summary: Actualiza los campos "status" y "observaciones" de un dato de vuelo utilizando el id
  *     tags: [DatosVuelo]
  *     parameters:
  *       - in: path
@@ -146,13 +222,16 @@ router.get('/:id', datosVueloController.getDatosVueloById);
  *               status:
  *                 type: boolean
  *                 example: true
+ *               observaciones:
+ *                 type: string
+ *                 example: "Actualización en las observaciones del vuelo"
  *     responses:
  *       200:
- *         description: Status actualizado exitosamente
+ *         description: Dato de vuelo actualizado exitosamente
  *       404:
  *         description: Dato de vuelo no encontrado
  *       500:
- *         description: Error al actualizar el status
+ *         description: Error al actualizar los datos de vuelo
  */
 router.put('/:id', datosVueloController.updateDatosVuelo);
 

@@ -46,8 +46,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
-      numero_vuelo: { // Nuevo campo "numero_vuelo"
+      numero_vuelo: {
         type: Sequelize.STRING,
+        allowNull: true,
+      },
+      observaciones: { // Nuevo campo "observaciones"
+        type: Sequelize.TEXT,
         allowNull: true,
       },
       status: {
